@@ -32,4 +32,13 @@ artistsRouter.post('/',  imagesUpload.single('image'), async (req, res, next) =>
     }
 });
 
+artistsRouter.get('/', async (req, res) => {
+    try {
+        const artists = await Artist.find();
+        return res.send(artists);
+    } catch (e) {
+        return res.sendStatus(500);
+    }
+});
+
 export default artistsRouter;
