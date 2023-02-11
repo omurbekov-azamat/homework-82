@@ -32,4 +32,27 @@ albumsRouter.post('/', imagesUpload.single('images'), async (req, res, next) => 
     }
 });
 
+albumsRouter.get('/', async (req, res, next) => {
+    if (req.query.artist) {
+        try {
+            const albums = await Album.find({artist: req.query.artist});
+
+            if (!albums) {
+                return res.status(404).send('Not Found!');
+            }
+
+            return res.send(albums);
+        } catch (e) {
+            return res.status(404).send({error: 'Not Found!'});
+        }
+    } else {
+        try {
+            const albums = await Album.find();
+            return res.send(albums);
+        } catch (e) {
+            return next(e);
+        }
+    }
+});
+
 export default albumsRouter;
