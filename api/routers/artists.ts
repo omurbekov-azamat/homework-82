@@ -1,8 +1,8 @@
 import express from 'express';
-import {ArtistMutation} from "../types";
+import mongoose from "mongoose";
 import {imagesUpload} from "../multer";
 import Artist from "../modules/Artist";
-import mongoose from "mongoose";
+import {ArtistMutation} from "../types";
 
 const artistsRouter = express.Router();
 
@@ -25,7 +25,7 @@ artistsRouter.post('/',  imagesUpload.single('image'), async (req, res, next) =>
         return res.send(artist);
     } catch (e) {
         if (e instanceof mongoose.Error.ValidationError) {
-            return res.sendStatus(400).send(e);
+            return res.status(400).send(e);
         } else {
             next(e);
         }

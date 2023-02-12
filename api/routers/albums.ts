@@ -1,8 +1,8 @@
 import express from "express";
+import mongoose from "mongoose";
+import Album from "../modules/Album";
 import {imagesUpload} from "../multer";
 import {AlbumMutation} from "../types";
-import Album from "../modules/Album";
-import mongoose from "mongoose";
 
 const albumsRouter = express.Router();
 
@@ -25,7 +25,7 @@ albumsRouter.post('/', imagesUpload.single('images'), async (req, res, next) => 
         return res.send(album);
     } catch (e) {
         if (e instanceof mongoose.Error.ValidationError) {
-            return res.sendStatus(400).send(e);
+            return res.status(400).send(e);
         } else {
             next(e);
         }
@@ -38,10 +38,10 @@ albumsRouter.get('/', async (req, res, next) => {
             const albums = await Album.find({artist: req.query.artist});
 
             if (!albums) {
-                return res.status(404).send('Not Found!');
+                return res.status(404).send({error: 'Not Found!'});
             }
-
             return res.send(albums);
+
         } catch (e) {
             return res.status(404).send({error: 'Not Found!'});
         }
@@ -53,6 +53,20 @@ albumsRouter.get('/', async (req, res, next) => {
             return next(e);
         }
     }
+});
+
+albumsRouter.get('/:id', async (req, res, next) => {
+   try {
+       const result = await Album.findById(req.params.id).populate('artist');
+
+       if (!result) {
+           return res.status(404).send({error: 'Not found!'});
+       }
+
+       return res.send(result);
+   } catch (e) {
+       return next(e);
+   }
 });
 
 export default albumsRouter;

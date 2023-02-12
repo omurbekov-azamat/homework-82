@@ -1,8 +1,8 @@
 import multer from 'multer'
 import {promises as fs} from 'fs';
 import path from 'path';
-import { randomUUID } from 'crypto';
 import config from './config';
+import { randomUUID } from 'crypto';
 
 const imageStorage = multer.diskStorage({
     destination: async (_req, _file, cb) => {
