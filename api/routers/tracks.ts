@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import Track from "../modules/Track";
+import Album from "../modules/Album";
 import {TrackMutation} from "../types";
 
 const tracksRouter = express.Router();
@@ -40,7 +41,7 @@ tracksRouter.get('/', async (req, res, next) => {
             }
 
             return res.send(album);
-        } catch (e){
+        } catch (e) {
             return res.status(404).send({error: 'Not found'});
         }
     }
@@ -50,6 +51,30 @@ tracksRouter.get('/', async (req, res, next) => {
     } catch (e) {
         return next(e);
     }
-})
+});
+
+tracksRouter.get('/:id', async (req, res) => {
+    try {
+        const albums = await Album.find({artist: req.params.id});
+
+        if (!albums) {
+            return res.status(404).send({error: 'Not found'});
+        }
+
+        const idAlbums = [];
+
+        const array = [...albums];
+
+        for (let i = 0; i < array.length; i++) {
+            idAlbums.push(array[i]._id);
+        }
+
+        const test = await Track.find({album: idAlbums}).populate('album');
+
+        return res.send(test);
+    } catch (e) {
+        return res.status(404).send({error: 'Not found'});
+    }
+});
 
 export default tracksRouter;
