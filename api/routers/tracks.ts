@@ -30,4 +30,26 @@ tracksRouter.post('/', async (req, res, next) => {
     }
 });
 
+tracksRouter.get('/', async (req, res, next) => {
+    if (req.query.album) {
+        try {
+            const album = await Track.find({album: req.query.album});
+
+            if (!album) {
+                return res.status(404).send({error: 'Not found'});
+            }
+
+            return res.send(album);
+        } catch (e){
+            return res.status(404).send({error: 'Not found'});
+        }
+    }
+    try {
+        const tracks = await Track.find();
+        return res.send(tracks);
+    } catch (e) {
+        return next(e);
+    }
+})
+
 export default tracksRouter;
