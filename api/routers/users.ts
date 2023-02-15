@@ -13,6 +13,8 @@ usersRouter.post('/', async (req, res, next) => {
             username: req.body.username,
             password: req.body.password,
         });
+
+        user.generateToken();
         await user.save();
         return res.send(user);
     } catch (error) {

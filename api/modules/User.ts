@@ -1,7 +1,14 @@
-import {model, Schema} from "mongoose";
+import {Model, model, Schema} from "mongoose";
+import {randomUUID} from "crypto";
 import {IUser} from "../types";
 
-const UserSchema = new Schema<IUser>({
+interface IUserMethods {
+    generateToken(): void;
+}
+
+type UserModel = Model<IUser, {}, IUserMethods>
+
+const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
     username: {
         type: String,
         required: true,
@@ -11,7 +18,15 @@ const UserSchema = new Schema<IUser>({
         type: String,
         required: true,
     },
+    token: {
+        type: String,
+        required: true,
+    }
 });
 
-const User = model('User', UserSchema);
+UserSchema.methods.generateToken = function () {
+    this.token = randomUUID();
+};
+
+const User = model<IUser, UserModel>('User', UserSchema);
 export default User;
