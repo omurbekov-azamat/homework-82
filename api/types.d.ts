@@ -16,3 +16,8 @@ export interface TrackMutation {
     name: string;
     duration: string;
 }
+
+export interface IUser {
+    username: string;
+    password: string;
+}
