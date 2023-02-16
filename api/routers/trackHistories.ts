@@ -1,19 +1,34 @@
 import express from "express";
 import {Error} from "mongoose";
 import TrackHistory from "../modules/TrackHistory";
+import User from "../modules/User";
 import {TrackHistoryMutation} from "../types";
 
-const trackHistoryRouter = express.Router();
 
-trackHistoryRouter.post('/', async (req, res, next) => {
-    if (!req.body.user || !req.body.track) {
+const trackHistoriesRouter = express.Router();
+
+trackHistoriesRouter.post('/', async (req, res, next) => {
+    if (!req.body.track) {
         return res.status(400).send({error: 'All fields are required'});
     }
+
     try {
+        const token = req.get('Authorization');
+
+        if (!token) {
+            return res.status(401).send({error: 'No token present'});
+        }
+
+        const user = await User.findOne({token});
+
+        if (!user) {
+            return res.status(401).send({error: 'Wrong token!'});
+        }
+
         const trackHistoryData: TrackHistoryMutation = {
-            user: req.body.user,
+            user: user.id,
             track: req.body.track,
-            datetime: new Date().toString(),
+            datetime: new Date().toISOString(),
         };
 
         const trackHistory = new TrackHistory(trackHistoryData);
@@ -29,4 +44,4 @@ trackHistoryRouter.post('/', async (req, res, next) => {
     }
 });
 
-export default trackHistoryRouter;
+export default trackHistoriesRouter;
