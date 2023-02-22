@@ -1,13 +1,16 @@
 import React from 'react';
-import {AppBar, Container, Toolbar, Typography} from '@mui/material';
+import {NavLink} from "react-router-dom";
+import {AppBar, Button, Container, Toolbar, Typography} from '@mui/material';
 
 const AppToolbar = () => {
     return (
         <AppBar position="sticky" sx={{mb: 2}}>
-            <Container maxWidth='xs'>
+            <Container maxWidth='lg'>
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        All Music
+                        <Button component={NavLink} to='/artists' color='inherit'>
+                            Artists
+                        </Button>
                     </Typography>
                 </Toolbar>
             </Container>

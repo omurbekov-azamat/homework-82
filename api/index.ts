@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from "express";
 import mongoose from "mongoose";
 import artistsRouter from "./routers/artists";
@@ -10,6 +11,7 @@ import config from "./config";
 const app = express();
 const port = 8000;
 
+app.use(cors());
 app.use(express.static('public'));
 app.use(express.json());
 app.use('/artists', artistsRouter);

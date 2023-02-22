@@ -22,11 +22,11 @@ const run = async () => {
     const [firstArtist, secondArtist] = await Artist.create({
         name: 'The Black Eyed Peas',
         image: 'fixtures/theBlackEyedPeas.jpg',
-        information: 'Members: Will.i.am, Fergie, apl.de.ap, Taboo',
+        information: 'Will.i.am, Fergie, apl.de.ap, Taboo',
     }, {
         name: 'The Weeknd',
         image: 'fixtures/weeknd.jpg',
-        information: 'Members: Abel Makkonen Tesfaye',
+        information: 'Abel Makkonen Tesfaye',
     });
 
     const [elephunk, monkey, madness, starboy] = await Album.create({
