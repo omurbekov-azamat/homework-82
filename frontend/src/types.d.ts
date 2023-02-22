@@ -14,3 +14,25 @@ export interface Album {
     name: string;
     releaseDate: string;
 }
+
+export interface Track {
+    _id: string;
+    album: {
+        artist: string;
+        name: string;
+    }
+    duration: string | null;
+    name: string;
+    trackNumber: number;
+}
+
+export interface AlbumId {
+    album: Album[];
+    artist: string;
+}
+
+export interface ArtistWithTrack {
+    artist: Artist,
+    tracks: Track[],
+    album: string;
+}

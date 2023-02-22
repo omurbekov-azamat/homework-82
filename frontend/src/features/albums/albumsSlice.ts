@@ -5,11 +5,13 @@ import {Album} from "../../types";
 
 interface AlbumsState {
     albums: Album[];
+    artist: string | null
     fetchLoading: boolean;
 }
 
 const initialState: AlbumsState = {
     albums: [],
+    artist: null,
     fetchLoading: false,
 };
 
@@ -21,9 +23,10 @@ export const albumsSlice = createSlice({
         builder.addCase(fetchAlbumsById.pending, (state) => {
             state.fetchLoading = true;
         });
-        builder.addCase(fetchAlbumsById.fulfilled, (state, {payload: albums}) => {
+        builder.addCase(fetchAlbumsById.fulfilled, (state, {payload: data}) => {
             state.fetchLoading = false;
-            state.albums = albums;
+            state.albums = data.album;
+            state.artist = data.artist;
         });
         builder.addCase(fetchAlbumsById.rejected, (state) => {
             state.fetchLoading = false;
@@ -33,4 +36,5 @@ export const albumsSlice = createSlice({
 
 export const albumsReducer = albumsSlice.reducer;
 export const selectAlbums = (state: RootState) => state.albums.albums;
+export const selectArtistForAlbum = (state: RootState) => state.albums.artist;
 export const selectAlbumsFetching = (state: RootState) => state.albums.fetchLoading;

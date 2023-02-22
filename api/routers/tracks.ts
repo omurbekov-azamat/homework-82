@@ -34,7 +34,7 @@ tracksRouter.post('/', async (req, res, next) => {
 tracksRouter.get('/', async (req, res, next) => {
     if (req.query.album) {
         try {
-            const album = await Track.find({album: req.query.album});
+            const album = await Track.find({album: req.query.album}).populate('album');
 
             if (!album) {
                 return res.status(404).send({error: 'Not found'});

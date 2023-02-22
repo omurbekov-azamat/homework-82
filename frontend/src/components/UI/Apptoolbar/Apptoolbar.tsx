@@ -9,7 +9,7 @@ const AppToolbar = () => {
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         <Button component={NavLink} to='/artists' color='inherit'>
-                            Artists
+                            Home
                         </Button>
                     </Typography>
                 </Toolbar>
