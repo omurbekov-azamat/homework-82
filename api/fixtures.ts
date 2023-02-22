@@ -38,7 +38,7 @@ const run = async () => {
         artist: firstArtist._id,
         name: 'Monkey Business',
         releaseDate: 2005,
-        image: 'monkeyBusiness.jpg',
+        image: 'fixtures/monkeyBusiness.jpg',
     }, {
         artist: secondArtist._id,
         name: 'Beauty Behind the Madness',

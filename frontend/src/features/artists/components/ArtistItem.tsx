@@ -1,10 +1,17 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {apiURL} from "../../../constants";
-import {Card, CardActions, CardHeader, CardMedia, Grid, IconButton, styled} from "@mui/material";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import {Link as NavLink} from "react-router-dom";
+import {Card, CardHeader, CardMedia, Grid, styled} from "@mui/material";
 import noImageAvailable from '../../../assets/images/noImageAvailable.jpg';
+import {apiURL} from "../../../constants";
 import {Artist} from "../../../types";
+
+export const Link = styled(NavLink)({
+    color: 'inherit',
+    textDecoration: 'none',
+    '&:hover': {
+        color: 'inherit'
+    },
+});
 
 const ImageCardMedia = styled(CardMedia)({
     height: 0,
@@ -23,15 +30,10 @@ const ArtistItem: React.FC<Props> = ({singer}) => {
     }
 
     return (
-        <Grid item xs={12} sm={6} lg={3}>
+        <Grid item sx={{width: '500px'}} component={Link} to={'/artists/' + singer._id}>
             <Card>
                 <CardHeader title={singer.name}/>
                 <ImageCardMedia image={cardImage} title={singer.name}/>
-                <CardActions>
-                    <IconButton component={Link} to={'/artists/' + singer._id}>
-                        <ArrowForwardIcon/>
-                    </IconButton>
-                </CardActions>
             </Card>
         </Grid>
     );

@@ -6,6 +6,7 @@ export interface Artist {
 }
 
 export interface Album {
+    _id: string;
     artist: {
         name: string;
     };
