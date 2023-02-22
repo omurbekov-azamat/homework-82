@@ -7,14 +7,14 @@ import {AlbumMutation} from "../types";
 const albumsRouter = express.Router();
 
 albumsRouter.post('/', imagesUpload.single('images'), async (req, res, next) => {
-    if (!req.body.artist || !req.body.name || !req.body.date) {
+    if (!req.body.artist || !req.body.name || !req.body.releaseDate) {
         return res.status(400).send({error: 'All fields are required'});
     }
 
     const albumData: AlbumMutation = {
         artist: req.body.artist,
         name: req.body.name,
-        date: req.body.date,
+        releaseDate: Number(req.body.releaseDate),
         image: req.file ? req.file.filename : null,
     };
 
@@ -35,7 +35,7 @@ albumsRouter.post('/', imagesUpload.single('images'), async (req, res, next) => 
 albumsRouter.get('/', async (req, res, next) => {
     if (req.query.artist) {
         try {
-            const albums = await Album.find({artist: req.query.artist});
+            const albums = await Album.find({artist: req.query.artist}).populate('artist');
 
             if (!albums) {
                 return res.status(404).send({error: 'Not Found!'});

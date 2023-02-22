@@ -32,22 +32,22 @@ const run = async () => {
     const [elephunk, monkey, madness, starboy] = await Album.create({
         artist: firstArtist._id,
         name: 'Elephunk',
-        date: 'June 24, 2003',
+        releaseDate: 2003,
         image: 'fixtures/elephunk.jpg',
     }, {
         artist: firstArtist._id,
         name: 'Monkey Business',
-        date: ' June 7, 2005',
+        releaseDate: 2005,
         image: 'monkeyBusiness.jpg',
     }, {
         artist: secondArtist._id,
         name: 'Beauty Behind the Madness',
-        date: '2011',
+        releaseDate: 2011,
         image: 'fixtures/Madness.jpg',
     }, {
         artist: secondArtist._id,
         name: 'Starboy',
-        date: '2015',
+        releaseDate: 2015,
         image: 'fixtures/Starboy.jpg',
     });
 
