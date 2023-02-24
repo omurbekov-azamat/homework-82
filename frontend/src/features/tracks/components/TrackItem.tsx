@@ -7,6 +7,7 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import {Card, Grid} from "@mui/material";
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import {Track} from "../../../types";
 
 interface Props {
@@ -25,9 +26,16 @@ const TrackItem: React.FC<Props> = ({song}) => {
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography component="div" variant="h5">
-                            {song.name}
-                        </Typography>
+                        <Grid container alignItems='center' spacing={0.5}>
+                            <Grid item>
+                                <MusicNoteIcon/>
+                            </Grid>
+                            <Grid item>
+                                <Typography component="div" variant="h5">
+                                    {song.name}
+                                </Typography>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs>
                         <Grid container direction='column' alignItems='center'>

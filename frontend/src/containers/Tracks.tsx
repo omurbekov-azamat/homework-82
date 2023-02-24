@@ -16,8 +16,8 @@ const Tracks = () => {
     const {id} = useParams() as {id: string};
 
     useEffect(() => {
-        dispatch(fetchTracksFromAlbumById(id))
-    }, [dispatch]);
+        dispatch(fetchTracksFromAlbumById(id));
+    }, [dispatch, id]);
 
     return (
         <>
