@@ -1,8 +1,13 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
 import {AppBar, Button, Container, Grid, Toolbar, Typography} from '@mui/material';
+import {useAppSelector} from "../../../app/hook";
+import {selectUser} from "../../../features/User/userSlice";
+import UserMenu from "./UserMenu";
+import AnonymousMenu from "./AnonymousMenu";
 
 const AppToolbar = () => {
+    const user = useAppSelector(selectUser);
     return (
         <AppBar position="sticky" sx={{mb: 2}}>
             <Container maxWidth='lg'>
@@ -14,7 +19,11 @@ const AppToolbar = () => {
                             </Button>
                         </Typography>
                         <Grid item>
-                            <Button component={NavLink} to='/register' color='inherit'>Sign up</Button>
+                            {user ? (
+                                <UserMenu user={user}/>
+                            ) : (
+                                <AnonymousMenu/>
+                            )}
                         </Grid>
                     </Grid>
                 </Toolbar>

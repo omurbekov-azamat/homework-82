@@ -69,3 +69,8 @@ export interface ValidationError {
 export type GlobalError = {
     error: string;
 }
+
+export interface LoginMutation {
+    username: string;
+    password: string;
+}

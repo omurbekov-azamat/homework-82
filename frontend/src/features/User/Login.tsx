@@ -1,51 +1,34 @@
 import React, {useState} from 'react';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
-import {useAppDispatch, useAppSelector} from "../../app/hook";
-import {register} from "./userThunks";
-import {selectRegisterError, selectRegisterLoading, selectUserTakenError} from "./userSlice";
 import {Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import Alert from '@mui/material/Alert'
+import {useAppDispatch, useAppSelector} from "../../app/hook";
+import {selectLoginError, selectLoginLoading} from "./userSlice";
+import {login} from "./userThunks";
 import {LoadingButton} from "@mui/lab";
-import {RegisterMutation} from '../../types';
+import {LoginMutation} from '../../types';
 
-
-const Register = () => {
+const Login = () => {
     const dispatch = useAppDispatch();
-    const error = useAppSelector(selectRegisterError);
-    const userTakenError = useAppSelector(selectUserTakenError);
-    const loading = useAppSelector(selectRegisterLoading);
+    const error = useAppSelector(selectLoginError);
+    const loading = useAppSelector(selectLoginLoading)
     const navigate = useNavigate();
 
-    const [state, setState] = useState<RegisterMutation>({
+    const [state, setState] = useState<LoginMutation>({
         username: '',
         password: '',
     });
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
-        setState(prev => ({...prev, [name]: value}));
+        setState(prevState => ({...prevState, [name]: value}));
     };
 
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
-        await dispatch(register(state)).unwrap();
+        await dispatch(login(state)).unwrap();
         navigate('/');
-    };
-
-    const getTakenNameError = () => {
-        try {
-            return userTakenError?.error;
-        } catch {
-            return undefined;
-        }
-    }
-
-    const getFieldError = (fieldName: string) => {
-        try {
-            return error?.errors[fieldName].message;
-        } catch {
-            return undefined;
-        }
     };
 
     return (
@@ -58,53 +41,54 @@ const Register = () => {
                     alignItems: 'center',
                 }}
             >
-                <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                    <LockOutlinedIcon/>
+                <Avatar sx={{m: 1, bgcolor: 'red'}}>
+                    <LockOpenIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign up
+                    Sign in
                 </Typography>
-                <Box component="form" noValidate onSubmit={submitFormHandler} sx={{mt: 3}}>
+                {error && (
+                    <Alert severity="error" sx={{mt: 3, width: '100%'}}>
+                        {error.error}
+                    </Alert>
+                )}
+                <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3}}>
                     <Grid container spacing={2} textAlign='center'>
                         <Grid item xs={12}>
                             <TextField
                                 label="Username"
                                 name="username"
-                                autoComplete="new-username"
+                                autoComplete="current-username"
                                 value={state.username}
                                 onChange={inputChangeHandler}
-                                error={Boolean(getFieldError('username')) || Boolean(getTakenNameError())}
-                                helperText={getFieldError('username') || getTakenNameError()}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                name="password"
                                 label="Password"
+                                name="password"
                                 type="password"
-                                autoComplete="new-password"
+                                autoComplete="current-password"
                                 value={state.password}
                                 onChange={inputChangeHandler}
-                                error={Boolean(getFieldError('password'))}
-                                helperText={getFieldError('password')}
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <LoadingButton
                                 type='submit'
-                                color='secondary'
+                                color='primary'
                                 loading={loading}
                                 variant='contained'
                                 sx={{mb: 2}}
                             >
-                                Sign Up
+                                Sign in
                             </LoadingButton>
                         </Grid>
                     </Grid>
                     <Grid container justifyContent="flex-end">
                         <Grid item>
-                            <Link component={RouterLink} to="/login" variant="body2">
-                                Already have an account? Sign in
+                            <Link component={RouterLink} to="/register" variant="body2">
+                                Or sign up
                             </Link>
                         </Grid>
                     </Grid>
@@ -114,4 +98,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default Login;

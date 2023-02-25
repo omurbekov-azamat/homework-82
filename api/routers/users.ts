@@ -33,13 +33,17 @@ usersRouter.post('/sessions', async (req, res) => {
     const isMatch = await user.checkPassword(req.body.password);
 
     if (!isMatch) {
-        return res.status(404).send({error: 'Password is wrong'});
+        return res.status(400).send({error: 'Password is wrong'});
     }
 
-    user.generateToken();
-    await user.save();
+    try {
+        user.generateToken();
+        await user.save();
 
-    return res.send({message: 'Username and password correct', user});
+        return res.send({message: 'Username and password correct', user});
+    } catch (e) {
+        return res.status(400);
+    }
 });
 
 export default usersRouter;
