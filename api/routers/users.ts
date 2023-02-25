@@ -5,9 +5,6 @@ import User from "../modules/User";
 const usersRouter = express.Router();
 
 usersRouter.post('/', async (req, res, next) => {
-    if (!req.body.username || !req.body.password) {
-        return res.status(400).send({error: 'All fields are required'});
-    }
     try {
         const user = new User({
             username: req.body.username,
@@ -16,7 +13,7 @@ usersRouter.post('/', async (req, res, next) => {
 
         user.generateToken();
         await user.save();
-        return res.send(user);
+        return res.send({message: 'Registered successfully!', user});
     } catch (error) {
         if (error instanceof Error.ValidationError) {
             return res.status(400).send(error);
@@ -27,10 +24,6 @@ usersRouter.post('/', async (req, res, next) => {
 });
 
 usersRouter.post('/sessions', async (req, res) => {
-    if (!req.body.username || !req.body.password) {
-        return res.status(400).send({error: 'All fields are required'});
-    }
-
     const user = await User.findOne({username: req.body.username});
 
     if (!user) {

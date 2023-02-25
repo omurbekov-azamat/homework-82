@@ -4,6 +4,7 @@ import Home from "./containers/Home";
 import Artists from "./containers/Artists";
 import Albums from "./containers/Albums";
 import Tracks from "./containers/Tracks";
+import Register from "./features/User/Register.";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Route path='/artists' element={<Artists/>}/>
                 <Route path='/artists/:id' element={<Albums/>}/>
                 <Route path='/albums/:id' element={<Tracks/>}/>
+                <Route path='/register' element={<Register/>}/>
             </Route>
             <Route path='*' element={(<h1>Not found!</h1>)}/>
         </Routes>
