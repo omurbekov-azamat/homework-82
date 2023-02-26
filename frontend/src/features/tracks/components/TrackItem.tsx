@@ -8,6 +8,8 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import {Card, Grid} from "@mui/material";
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import {useAppDispatch} from "../../../app/hook";
+import {playTrack} from "../../trackHistrories/trackHistoriesThunks";
 import {Track} from "../../../types";
 
 interface Props {
@@ -15,6 +17,12 @@ interface Props {
 }
 
 const TrackItem: React.FC<Props> = ({song}) => {
+    const dispatch = useAppDispatch();
+
+    const startTrack = async (id: string) => {
+        await dispatch(playTrack(id));
+    };
+
     const theme = useTheme();
     return (
         <Grid item>
@@ -44,7 +52,7 @@ const TrackItem: React.FC<Props> = ({song}) => {
                                     <IconButton aria-label="previous">
                                         {theme.direction === 'rtl' ? <SkipNextIcon/> : <SkipPreviousIcon/>}
                                     </IconButton>
-                                    <IconButton aria-label="play/pause">
+                                    <IconButton aria-label="play/pause" onClick={() => startTrack(song._id)}>
                                         <PlayArrowIcon sx={{height: 38, width: 38}}/>
                                     </IconButton>
                                     <IconButton aria-label="next">

@@ -3,8 +3,8 @@ import {Routes, Route} from "react-router-dom";
 import Home from "./containers/Home";
 import Artists from "./containers/Artists";
 import Albums from "./containers/Albums";
-import Register from "./features/User/Register.";
-import Login from "./features/User/Login";
+import Register from "./features/user/Register.";
+import Login from "./features/user/Login";
 import UserTracks from "./containers/UserTracks";
 
 function App() {

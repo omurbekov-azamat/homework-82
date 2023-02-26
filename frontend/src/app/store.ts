@@ -2,10 +2,11 @@ import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {artistsReducer} from "../features/artists/artistsSlice";
 import {albumsReducer} from "../features/albums/albumsSlice";
 import {tracksReducer} from "../features/tracks/tracksSlice";
-import {usersReducer} from "../features/User/userSlice";
+import {usersReducer} from "../features/user/userSlice";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist/es/constants';
+import {trackHistoriesReducer} from "../features/trackHistrories/trackHistoriesSlice";
 
 const usersPersistConfig = {
     key: 'spotify:users',
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
     albums: albumsReducer,
     tracks: tracksReducer,
     users: persistReducer(usersPersistConfig, usersReducer),
+    trackHistories: trackHistoriesReducer,
 });
 
 export const store = configureStore({

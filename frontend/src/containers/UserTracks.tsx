@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useAppSelector} from "../app/hook";
-import {selectUser} from "../features/User/userSlice";
+import {selectUser} from "../features/user/userSlice";
 import Tracks from "../features/tracks/Tracks";
 import {useNavigate} from "react-router-dom";
 
