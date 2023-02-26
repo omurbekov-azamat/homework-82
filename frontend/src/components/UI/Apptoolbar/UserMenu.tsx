@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Button, Menu, MenuItem } from '@mui/material';
-import { User } from '../../../types';
+import React, {useState} from 'react';
+import {Button, Menu, MenuItem} from '@mui/material';
+import {Link as NavLink} from "react-router-dom";
+import {User} from '../../../types';
 
 interface Props {
     user: User;
@@ -30,9 +31,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem>Profile</MenuItem>
-                <MenuItem>My account</MenuItem>
-                <MenuItem>Logout</MenuItem>
+                <MenuItem component={NavLink} to='/track_histories'>Track history</MenuItem>
             </Menu>
         </>
     );

@@ -15,6 +15,7 @@ export interface TrackMutation {
     album: string;
     name: string;
     duration: string;
+    trackNumber: string;
 }
 
 export interface IUser {
@@ -26,5 +27,12 @@ export interface IUser {
 export interface TrackHistoryMutation {
     user: string;
     track: string;
+    datetime: string;
+}
+
+export interface TrackWithHistory {
+    _id: string;
+    user: string;
+    track: TrackMutation,
     datetime: string;
 }

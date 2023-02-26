@@ -7,14 +7,15 @@ import {TrackMutation} from "../types";
 const tracksRouter = express.Router();
 
 tracksRouter.post('/', async (req, res, next) => {
-    if (!req.body.album || !req.body.name) {
-        return res.status(400).send({error: 'Album and name is required'});
+    if (!req.body.album || !req.body.name || !req.body.trackNumber) {
+        return res.status(400).send({error: 'All fields are required'});
     }
 
     const trackData: TrackMutation = {
         album: req.body.album,
         name: req.body.name,
         duration: req.body.duration,
+        trackNumber: req.body.trackNumber,
     };
 
     const track = new Track(trackData);

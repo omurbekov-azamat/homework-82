@@ -6,6 +6,7 @@ import Albums from "./containers/Albums";
 import Register from "./features/user/Register.";
 import Login from "./features/user/Login";
 import UserTracks from "./containers/UserTracks";
+import TrackHistories from "./containers/TrackHistories";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                 <Route path='/albums/:id' element={<UserTracks/>}/>
                 <Route path='/register' element={<Register/>}/>
                 <Route path='/login' element={<Login/>}/>
+                <Route path='/track_histories' element={<TrackHistories/>}/>
             </Route>
             <Route path='*' element={(<h1>Not found!</h1>)}/>
         </Routes>
