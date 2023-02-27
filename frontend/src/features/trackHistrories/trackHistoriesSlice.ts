@@ -4,7 +4,7 @@ import {getHistories, playTrack} from "./trackHistoriesThunks";
 import {TrackHistoriesMutation} from "../../types";
 
 interface TrackHistoriesState {
-    playTrack: boolean;
+    playTrack: false | string;
     fetchHistories: boolean;
     histories: TrackHistoriesMutation[];
 }
@@ -20,8 +20,8 @@ export const trackHistoriesSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(playTrack.pending, (state) => {
-            state.playTrack = true;
+        builder.addCase(playTrack.pending, (state, {meta}) => {
+            state.playTrack = meta.arg;
         });
         builder.addCase(playTrack.fulfilled, (state) => {
             state.playTrack = false;

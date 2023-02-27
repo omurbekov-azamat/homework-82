@@ -12,7 +12,7 @@ export const playTrack = createAsyncThunk<void, string, { state: RootState }>(
                await axiosApi.post('/track_histories', {track: id}, {headers: {'Authorization': user.token}});
             }
         } catch (e) {
-            console.log(e);
+            throw e
         }
     }
 );
