@@ -5,8 +5,8 @@ import Artists from "./containers/Artists";
 import Albums from "./containers/Albums";
 import Register from "./features/user/Register.";
 import Login from "./features/user/Login";
-import UserTracks from "./containers/UserTracks";
 import TrackHistories from "./containers/TrackHistories";
+import Tracks from "./containers/Tracks";
 
 function App() {
     return (
@@ -15,7 +15,7 @@ function App() {
                 <Route path='/' element={<Artists/>}/>
                 <Route path='/artists' element={<Artists/>}/>
                 <Route path='/artists/:id' element={<Albums/>}/>
-                <Route path='/albums/:id' element={<UserTracks/>}/>
+                <Route path='/albums/:id' element={<Tracks/>}/>
                 <Route path='/register' element={<Register/>}/>
                 <Route path='/login' element={<Login/>}/>
                 <Route path='/track_histories' element={<TrackHistories/>}/>

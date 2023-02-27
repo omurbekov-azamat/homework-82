@@ -49,13 +49,13 @@ const AlbumItem: React.FC<Props> = ({album}) => {
                         </Typography>
                     </CardContent>
                     <Box sx={{display: 'flex', alignItems: 'center', pl: 1, pb: 1}}>
-                        <IconButton aria-label="previous">
+                        <IconButton aria-label="previous" disabled>
                             {theme.direction === 'rtl' ? <SkipNextIcon/> : <SkipPreviousIcon/>}
                         </IconButton>
-                        <IconButton aria-label="play/pause">
+                        <IconButton aria-label="play/pause" disabled>
                             <PlayArrowIcon sx={{height: 38, width: 38}}/>
                         </IconButton>
-                        <IconButton aria-label="next">
+                        <IconButton aria-label="next" disabled>
                             {theme.direction === 'rtl' ? <SkipPreviousIcon/> : <SkipNextIcon/>}
                         </IconButton>
                     </Box>

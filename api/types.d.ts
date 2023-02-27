@@ -1,3 +1,5 @@
+import {ObjectId} from "mongoose";
+
 export interface ArtistMutation {
     name: string;
     image: string | null;
@@ -25,14 +27,18 @@ export interface IUser {
 }
 
 export interface TrackHistoryMutation {
-    user: string;
-    track: string;
+    user: ObjectId;
+    track: ObjectId;
+    artist: ObjectId;
+    album: ObjectId;
     datetime: string;
 }
 
-export interface TrackWithHistory {
-    _id: string;
-    user: string;
-    track: TrackMutation,
-    datetime: string;
+export interface SaveTrackHistory {
+    album: {
+        artist: {
+            _id: ObjectId;
+        },
+        _id: ObjectId;
+    }
 }

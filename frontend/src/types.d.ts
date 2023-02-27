@@ -74,3 +74,18 @@ export interface LoginMutation {
     username: string;
     password: string;
 }
+
+export interface TrackHistoriesMutation {
+    album: string;
+    artist: {
+        name: string;
+        _id: string;
+    },
+    datetime: string;
+    track: {
+        name: string;
+        _id: string;
+    },
+    user: string;
+    _id: string;
+}

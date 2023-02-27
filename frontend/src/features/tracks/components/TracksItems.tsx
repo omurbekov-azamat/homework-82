@@ -18,7 +18,6 @@ const TracksItems: React.FC<Props> = ({songs}) => {
                     />
                 ))}
             </Grid>
-
         </>
     );
 };
