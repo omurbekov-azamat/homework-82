@@ -3,13 +3,18 @@ import axiosApi from "../../axiosApi";
 import {RootState} from "../../app/store";
 import {TrackHistoriesMutation} from "../../types";
 
-export const playTrack = createAsyncThunk<void, string, { state: RootState }>(
+export interface ShortInfo{
+    id: string;
+    url: string;
+}
+
+export const playTrack = createAsyncThunk<void, ShortInfo, { state: RootState }>(
     'trackHistories/playTrack',
-    async (id, {getState}) => {
+    async (shortInfo, {getState}) => {
         try {
             const user = getState().users.user
             if (user) {
-               await axiosApi.post('/track_histories', {track: id}, {headers: {'Authorization': user.token}});
+               await axiosApi.post('/track_histories', {track: shortInfo.id}, {headers: {'Authorization': user.token}});
             }
         } catch (e) {
             throw e

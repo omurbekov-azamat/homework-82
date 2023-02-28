@@ -24,6 +24,7 @@ export interface Track {
     duration: string | null;
     name: string;
     trackNumber: number;
+    url: string;
 }
 
 export interface AlbumId {

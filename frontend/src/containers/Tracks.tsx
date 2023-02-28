@@ -6,6 +6,7 @@ import {selectAlbum, selectArtist, selectTracks, selectTracksFetching} from "../
 import TracksItems from "../features/tracks/components/TracksItems";
 import {Typography} from "@mui/material";
 import Spinner from "../components/UI/Spinner/Spinner";
+import BasicModal from "../components/UI/Modal/Modal";
 
 const Tracks = () => {
     const dispatch = useAppDispatch();
@@ -29,6 +30,7 @@ const Tracks = () => {
                 {album && album + ' (album)'}
             </Typography>
             <TracksItems songs={tracks}/>
+            <BasicModal/>
         </>
     );
 };

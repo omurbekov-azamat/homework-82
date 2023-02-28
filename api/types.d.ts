@@ -18,6 +18,7 @@ export interface TrackMutation {
     name: string;
     duration: string;
     trackNumber: string;
+    url: string;
 }
 
 export interface IUser {

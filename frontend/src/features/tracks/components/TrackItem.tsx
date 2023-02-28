@@ -12,7 +12,7 @@ import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import {useAppDispatch, useAppSelector} from "../../../app/hook";
 import {playTrack} from "../../trackHistrories/trackHistoriesThunks";
 import {selectUser} from "../../user/userSlice";
-import {selectPlayTrack} from "../../trackHistrories/trackHistoriesSlice";
+import {selectPlayTrack, showYoutube} from "../../trackHistrories/trackHistoriesSlice";
 import {Track} from "../../../types";
 
 interface Props {
@@ -25,9 +25,10 @@ const TrackItem: React.FC<Props> = ({song}) => {
     const user = useAppSelector(selectUser);
     const [showPause, setShowPause] = useState(false);
 
-    const startTrack = async (id: string) => {
+    const startTrack = async (id: string, url: string) => {
         if (!showPause) {
-            await dispatch(playTrack(id));
+            await dispatch(playTrack({id, url}));
+            await dispatch(showYoutube());
         }
         setShowPause(!showPause);
     };
@@ -65,7 +66,7 @@ const TrackItem: React.FC<Props> = ({song}) => {
                                         </IconButton>
                                         <IconButton
                                             aria-label="play/pause"
-                                            onClick={() => startTrack(song._id)}
+                                            onClick={() => startTrack(song._id, song.url)}
                                             disabled={play ? play === song._id : false}
                                         >
                                             {showPause ? (
