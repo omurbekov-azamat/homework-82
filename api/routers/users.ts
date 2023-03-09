@@ -1,6 +1,6 @@
+import crypto from "crypto";
 import express from "express";
 import {Error} from "mongoose";
-import {randomUUID} from "crypto";
 import User from "../modules/User";
 
 const usersRouter = express.Router();
@@ -10,7 +10,7 @@ usersRouter.post('/', async (req, res, next) => {
         const user = await User.create({
             username: req.body.username,
             password: req.body.password,
-            token: randomUUID(),
+            token: crypto.randomUUID(),
         });
         return res.send({message: 'Registered successfully!', user});
     } catch (error) {

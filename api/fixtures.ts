@@ -1,8 +1,10 @@
+import crypto from 'crypto';
 import mongoose from "mongoose";
 import config from "./config";
 import Artist from "./modules/Artist";
 import Album from "./modules/Album";
 import Track from "./modules/Track";
+import User from "./modules/User";
 
 const run = async () => {
     mongoose.set('strictQuery', false);
@@ -10,11 +12,11 @@ const run = async () => {
     const db = mongoose.connection;
 
     try {
+        await db.dropCollection('tracks');
+        await db.dropCollection('users');
         await db.dropCollection('albums');
         await db.dropCollection('artists');
         await db.dropCollection('trackhistories');
-        await db.dropCollection('tracks');
-        await db.dropCollection('users');
     } catch (e) {
         console.log('Collections were not present');
     }
@@ -172,6 +174,18 @@ const run = async () => {
         trackNumber: 5,
         url: 'https://www.youtube.com/watch?v=M4ZoCHID9GI',
     });
+
+    await User.create({
+        username: 'user',
+        password: '123',
+        token: crypto.randomUUID(),
+    }, {
+        username: 'admin',
+        password: '123',
+        token: crypto.randomUUID(),
+        role: 'admin'
+    });
+
     await db.close();
 };
 
