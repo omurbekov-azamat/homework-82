@@ -21,6 +21,11 @@ const AlbumSchema = new Schema<AlbumMutation>({
         required: true,
     },
     image: String,
+    isPublished: {
+        type: Boolean,
+        required: true,
+        default: false,
+    }
 });
 
 const Album = model<AlbumMutation>('Album', AlbumSchema);

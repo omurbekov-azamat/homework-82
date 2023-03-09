@@ -9,6 +9,11 @@ const ArtistSchema = new Schema<ArtistMutation>({
     },
     image: String,
     information: String,
+    isPublished: {
+        type: Boolean,
+        required: true,
+        default: false,
+    }
 });
 
 const Artist = model<ArtistMutation>('Artist', ArtistSchema);
