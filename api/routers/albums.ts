@@ -1,11 +1,12 @@
 import {promises as fs} from 'fs';
 import express from "express";
-import mongoose from "mongoose";
+import mongoose, {HydratedDocument} from "mongoose";
 import {imagesUpload} from "../multer";
 import Album from "../modules/Album";
 import auth from "../middleware/auth";
 import permit from "../middleware/permit";
 import Track from "../modules/Track";
+import {AlbumMutation} from "../types";
 
 const albumsRouter = express.Router();
 
@@ -83,6 +84,23 @@ albumsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
         await Track.deleteMany({album: album._id});
 
         res.send({message: "Delete was successfully!"});
+    } catch (e) {
+        return next(e);
+    }
+});
+
+albumsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res, next) => {
+    const album: HydratedDocument<AlbumMutation> | null = await Album.findById(req.params.id);
+
+    if (!album) {
+        return res.status(404).send({error: 'Artist is not found'});
+    }
+
+    album.isPublished = !album.isPublished;
+
+    try {
+        await album.save();
+        return res.send({message: 'isPublished successfully changed!', album});
     } catch (e) {
         return next(e);
     }

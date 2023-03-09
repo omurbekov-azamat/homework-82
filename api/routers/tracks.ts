@@ -1,9 +1,10 @@
 import {promises as fs} from 'fs';
 import express from "express";
-import mongoose from "mongoose";
+import mongoose, {HydratedDocument} from "mongoose";
 import Track from "../modules/Track";
 import auth from "../middleware/auth";
 import permit from "../middleware/permit";
+import {TrackMutation} from "../types";
 
 const tracksRouter = express.Router();
 
@@ -66,6 +67,23 @@ tracksRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
         await Track.deleteOne(track._id);
 
         res.send({message: "Delete was successfully!"});
+    } catch (e) {
+        return next(e);
+    }
+});
+
+tracksRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res, next) => {
+    const track: HydratedDocument<TrackMutation> | null = await Track.findById(req.params.id);
+
+    if (!track) {
+        return res.status(404).send({error: 'Artist is not found'});
+    }
+
+    track.isPublished = !track.isPublished;
+
+    try {
+        await track.save();
+        return res.send({message: 'isPublished successfully changed!', track});
     } catch (e) {
         return next(e);
     }
