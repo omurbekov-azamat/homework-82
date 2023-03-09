@@ -1,14 +1,16 @@
 import React, {useRef, useState} from 'react';
 import {Box, Button, Grid, TextField} from '@mui/material';
+import {ValidationError} from "../../../types";
 
 interface Props {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     name: string;
     label: string;
     type?: string;
+    error?: ValidationError | null;
 }
 
-const FileInput: React.FC<Props> = ({onChange, name, label, type}) => {
+const FileInput: React.FC<Props> = ({onChange, name, label, type, error}) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [filename, setFilename] = useState('');
@@ -29,6 +31,14 @@ const FileInput: React.FC<Props> = ({onChange, name, label, type}) => {
         }
     };
 
+    const getFieldError = (fieldName: string) => {
+        try {
+            return error?.errors[fieldName].message;
+        } catch {
+            return undefined;
+        }
+    };
+
     return (
         <Box sx={{width: '300px'}}>
             <input
@@ -46,6 +56,8 @@ const FileInput: React.FC<Props> = ({onChange, name, label, type}) => {
                         label={label}
                         value={filename}
                         onClick={activateInput}
+                        error={Boolean(getFieldError('image'))}
+                        helperText={getFieldError('image')}
                     />
                 </Grid>
                 <Grid item>
