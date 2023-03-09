@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import {imagesUpload} from "../multer";
 import Album from "../modules/Album";
 import auth from "../middleware/auth";
+import permit from "../middleware/permit";
+import Track from "../modules/Track";
 
 const albumsRouter = express.Router();
 
@@ -67,6 +69,23 @@ albumsRouter.get('/:id', async (req, res, next) => {
    } catch (e) {
        return next(e);
    }
+});
+
+albumsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
+    try {
+        const album = await Album.findById(req.params.id);
+
+        if (!album) {
+            return res.status(404).send({error: 'Album is not found'});
+        }
+
+        await Album.deleteOne(album._id);
+        await Track.deleteMany({album: album._id});
+
+        res.send({message: "Delete was successfully!"});
+    } catch (e) {
+        return next(e);
+    }
 });
 
 export default albumsRouter;

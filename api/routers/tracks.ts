@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import Track from "../modules/Track";
 import auth from "../middleware/auth";
+import permit from "../middleware/permit";
 
 const tracksRouter = express.Router();
 
@@ -49,6 +50,22 @@ tracksRouter.get('/', async (req, res, next) => {
     try {
         const tracks = await Track.find();
         return res.send(tracks);
+    } catch (e) {
+        return next(e);
+    }
+});
+
+tracksRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
+    try {
+        const track = await Track.findById(req.params.id);
+
+        if (!track) {
+            return res.status(404).send({error: 'Track is not found'});
+        }
+
+        await Track.deleteOne(track._id);
+
+        res.send({message: "Delete was successfully!"});
     } catch (e) {
         return next(e);
     }
