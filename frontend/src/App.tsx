@@ -7,14 +7,25 @@ import Register from "./features/user/Register.";
 import Login from "./features/user/Login";
 import TrackHistories from "./containers/TrackHistories";
 import Tracks from "./containers/Tracks";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import {useAppSelector} from "./app/hook";
+import {selectUser} from "./features/user/userSlice";
+import ArtistForm from "./features/artists/components/ArtistForm";
 
 function App() {
+    const user = useAppSelector(selectUser);
+
     return (
         <Routes>
             <Route path='/' element={<Home/>}>
                 <Route path='/' element={<Artists/>}/>
                 <Route path='/artists' element={<Artists/>}/>
                 <Route path='/artists/:id' element={<Albums/>}/>
+                <Route path='/artists/addArtist' element={(
+                    <ProtectedRoute isAllowed={user && Boolean(user)}>
+                        <ArtistForm/>
+                    </ProtectedRoute>
+                )}/>
                 <Route path='/albums/:id' element={<Tracks/>}/>
                 <Route path='/register' element={<Register/>}/>
                 <Route path='/login' element={<Login/>}/>

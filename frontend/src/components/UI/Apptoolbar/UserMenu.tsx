@@ -44,6 +44,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
                 onClose={handleClose}
             >
                 <MenuItem component={NavLink} to='/track_histories'>Track history</MenuItem>
+                <MenuItem component={NavLink} to='/artists/addArtist'>Add Artist</MenuItem>
                 <MenuItem onClick={handleLogout} disabled={loading}>Logout</MenuItem>
             </Menu>
         </>

@@ -48,6 +48,7 @@ export interface User {
     _id: string;
     username: string;
     token: string;
+    role: string;
 }
 
 export interface RegisterResponse {
@@ -88,4 +89,12 @@ export interface TrackHistoriesMutation {
     },
     user: string;
     _id: string;
+}
+
+
+
+export interface ArtistMutation {
+    name: string;
+    image: File | null;
+    information: string;
 }
