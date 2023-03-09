@@ -98,3 +98,10 @@ export interface ArtistMutation {
     image: File | null;
     information: string;
 }
+
+export interface AlbumMutation {
+    artist: string;
+    name: string;
+    releaseDate: string;
+    image: File | null;
+}

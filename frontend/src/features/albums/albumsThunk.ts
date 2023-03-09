@@ -1,7 +1,33 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
 import {isAxiosError} from "axios";
-import {Album, AlbumId} from "../../types";
+import {Album, AlbumId, AlbumMutation, ValidationError} from "../../types";
+
+export const createAlbum = createAsyncThunk<void, AlbumMutation, {rejectValue: ValidationError}>(
+    'albums/createAlbum',
+    async (albumData, {rejectWithValue}) => {
+        try {
+            const formData = new FormData();
+            const keys = Object.keys(albumData) as (keyof AlbumMutation)[];
+
+            keys.forEach(key => {
+                const value = albumData[key];
+
+                if (value !== null) {
+                    formData.append(key, value);
+                }
+            });
+
+            await axiosApi.post('/albums', formData);
+        } catch (e) {
+            if (isAxiosError(e) && e.response && e.response.status === 400) {
+                return rejectWithValue(e.response.data as ValidationError);
+            }
+
+            throw e;
+        }
+    }
+);
 
 export const fetchAlbumsById = createAsyncThunk<AlbumId, string>(
     'albums/fetchAlbumById',

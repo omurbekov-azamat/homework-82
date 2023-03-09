@@ -65,6 +65,7 @@ const ArtistForm = () => {
                         name='name'
                         error={Boolean(getFieldError('name'))}
                         helperText={getFieldError('name')}
+                        required
                     />
                 </Grid>
                 <Grid item xs>

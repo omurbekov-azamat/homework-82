@@ -40,7 +40,7 @@ const FileInput: React.FC<Props> = ({onChange, name, label, type, error}) => {
     };
 
     return (
-        <Box sx={{width: '300px'}}>
+        <Box sx={{width: '350px'}}>
             <input
                 style={{display: 'none'}}
                 type="file"
@@ -61,7 +61,7 @@ const FileInput: React.FC<Props> = ({onChange, name, label, type, error}) => {
                     />
                 </Grid>
                 <Grid item>
-                    <Button type="button" variant="outlined" onClick={activateInput}>Browse</Button>
+                    <Button type="button" variant="contained" onClick={activateInput}>Browse</Button>
                 </Grid>
             </Grid>
         </Box>
