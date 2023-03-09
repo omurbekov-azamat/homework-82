@@ -2,10 +2,11 @@ import {promises as fs} from 'fs';
 import express from "express";
 import mongoose from "mongoose";
 import Track from "../modules/Track";
+import auth from "../middleware/auth";
 
 const tracksRouter = express.Router();
 
-tracksRouter.post('/', async (req, res, next) => {
+tracksRouter.post('/', auth, async (req, res, next) => {
     try {
         const track = await Track.create({
             album: req.body.album,

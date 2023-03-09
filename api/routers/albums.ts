@@ -3,10 +3,11 @@ import express from "express";
 import mongoose from "mongoose";
 import {imagesUpload} from "../multer";
 import Album from "../modules/Album";
+import auth from "../middleware/auth";
 
 const albumsRouter = express.Router();
 
-albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
+albumsRouter.post('/', auth,  imagesUpload.single('image'), async (req, res, next) => {
     try {
         const album = await Album.create({
             artist: req.body.artist,
