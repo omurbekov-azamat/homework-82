@@ -20,10 +20,7 @@ const TrackSchema = new Schema<TrackMutation>({
         type: Number,
         required: true,
     },
-    url: {
-        type: String,
-        required: true,
-    },
+    url: String,
     isPublished: {
         type: Boolean,
         required: true,

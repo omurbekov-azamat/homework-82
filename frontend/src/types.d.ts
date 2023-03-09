@@ -105,3 +105,12 @@ export interface AlbumMutation {
     releaseDate: string;
     image: File | null;
 }
+
+export interface TrackMutation {
+    artist: string;
+    album: string;
+    name: string;
+    duration: string;
+    trackNumber: string;
+    url: string;
+}

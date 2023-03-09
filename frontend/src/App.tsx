@@ -12,6 +12,7 @@ import {useAppSelector} from "./app/hook";
 import {selectUser} from "./features/user/userSlice";
 import ArtistForm from "./features/artists/components/ArtistForm";
 import AlbumForm from "./features/albums/components/AlbumForm";
+import TrackForm from "./features/tracks/components/TrackForm";
 
 function App() {
     const user = useAppSelector(selectUser);
@@ -31,6 +32,11 @@ function App() {
                 <Route path='/albums/addAlbum' element={(
                     <ProtectedRoute isAllowed={user && Boolean(user)}>
                         <AlbumForm/>
+                    </ProtectedRoute>
+                )}/>
+                <Route path='/tracks/addTrack' element={(
+                    <ProtectedRoute isAllowed={user && Boolean(user)}>
+                        <TrackForm/>
                     </ProtectedRoute>
                 )}/>
                 <Route path='/register' element={<Register/>}/>
