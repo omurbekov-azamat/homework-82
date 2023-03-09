@@ -15,12 +15,8 @@ export const fetchTracksFromAlbumById = createAsyncThunk<ArtistWithTrack, string
 
             const artistResponse = await axiosApi.get('/artists?artist=' + artistID);
 
-            const tracks = tracksResponse.data.sort((a, b) => {
-                return a.trackNumber < b.trackNumber ? -1 : 1;
-            });
-
             return {
-                tracks,
+                tracks: tracksResponse.data,
                 artist: artistResponse.data,
                 album,
             };

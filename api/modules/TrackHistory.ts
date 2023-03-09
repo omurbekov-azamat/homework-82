@@ -2,7 +2,6 @@ import {model, Schema, Types} from "mongoose";
 import User from "./User";
 import Track from "./Track";
 import Artist from "./Artist";
-import Album from "./Album";
 import {TrackHistoryMutation} from "../types";
 
 const TrackHistorySchema = new Schema<TrackHistoryMutation>({
@@ -33,20 +32,11 @@ const TrackHistorySchema = new Schema<TrackHistoryMutation>({
             message: 'Artist does not exist',
         },
     },
-    album: {
-        type: Schema.Types.ObjectId,
-        ref: 'Album',
-        required: true,
-        validate: {
-            validator: async (value: Types.ObjectId) => Album.findById(value),
-            message: 'Album does not exist',
-        },
-    },
     datetime: {
         type: String,
         required: true,
     }
 });
 
-const TrackHistory = model('TrackHistory', TrackHistorySchema);
+const TrackHistory = model<TrackHistoryMutation>('TrackHistory', TrackHistorySchema);
 export default TrackHistory;

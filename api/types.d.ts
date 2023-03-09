@@ -7,17 +7,17 @@ export interface ArtistMutation {
 }
 
 export interface AlbumMutation {
-    artist: string;
+    artist: ObjectId;
     name: string;
     releaseDate: number;
     image: string | null;
 }
 
 export interface TrackMutation {
-    album: string;
+    album: ObjectId;
     name: string;
     duration: string;
-    trackNumber: string;
+    trackNumber: number;
     url: string;
 }
 
@@ -31,7 +31,6 @@ export interface TrackHistoryMutation {
     user: ObjectId;
     track: ObjectId;
     artist: ObjectId;
-    album: ObjectId;
     datetime: string;
 }
 

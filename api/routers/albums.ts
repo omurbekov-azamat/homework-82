@@ -1,33 +1,28 @@
+import {promises as fs} from 'fs';
 import express from "express";
 import mongoose from "mongoose";
-import Album from "../modules/Album";
 import {imagesUpload} from "../multer";
-import {AlbumMutation} from "../types";
+import Album from "../modules/Album";
 
 const albumsRouter = express.Router();
 
-albumsRouter.post('/', imagesUpload.single('images'), async (req, res, next) => {
-    if (!req.body.artist || !req.body.name || !req.body.releaseDate) {
-        return res.status(400).send({error: 'All fields are required'});
-    }
-
-    const albumData: AlbumMutation = {
-        artist: req.body.artist,
-        name: req.body.name,
-        releaseDate: Number(req.body.releaseDate),
-        image: req.file ? req.file.filename : null,
-    };
-
-    const album = new Album(albumData);
-
+albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
     try {
-        await album.save();
+        const album = await Album.create({
+            artist: req.body.artist,
+            name: req.body.name,
+            releaseDate: parseFloat(req.body.releaseDate),
+            image: req.file ? req.file.filename : null,
+        });
         return res.send(album);
     } catch (e) {
+        if (req.file) {
+            await fs.unlink(req.file.path);
+        }
         if (e instanceof mongoose.Error.ValidationError) {
             return res.status(400).send(e);
         } else {
-            next(e);
+            return next(e);
         }
     }
 });
@@ -40,8 +35,12 @@ albumsRouter.get('/', async (req, res, next) => {
             if (!albums) {
                 return res.status(404).send({error: 'Not Found!'});
             }
-            return res.send(albums);
 
+            const artistAlbums = albums.sort((a, b) => {
+                return a.releaseDate < b.releaseDate ? 1 : -1;
+            });
+
+            return res.send(artistAlbums);
         } catch (e) {
             return res.status(404).send({error: 'Not Found!'});
         }

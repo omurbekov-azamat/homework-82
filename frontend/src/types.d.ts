@@ -77,7 +77,6 @@ export interface LoginMutation {
 }
 
 export interface TrackHistoriesMutation {
-    album: string;
     artist: {
         name: string;
         _id: string;

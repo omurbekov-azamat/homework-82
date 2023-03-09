@@ -1,9 +1,8 @@
-import mongoose, {Types} from 'mongoose';
+import {Types, Schema, model} from 'mongoose';
 import Album from "./Album";
+import {TrackMutation} from "../types";
 
-const Schema = mongoose.Schema;
-
-const TrackSchema = new Schema({
+const TrackSchema = new Schema<TrackMutation>({
     album: {
         type: Schema.Types.ObjectId,
         ref: 'Album',
@@ -27,5 +26,5 @@ const TrackSchema = new Schema({
     },
 });
 
-const Track = mongoose.model('Track', TrackSchema);
+const Track = model<TrackMutation>('Track', TrackSchema);
 export default Track

@@ -1,13 +1,13 @@
-import mongoose, {Types} from 'mongoose';
+import {Types, model, Schema} from 'mongoose';
 import Artist from "./Artist";
+import {AlbumMutation} from "../types";
 
-const Schema = mongoose.Schema;
-
-const AlbumSchema = new Schema({
+const AlbumSchema = new Schema<AlbumMutation>({
     artist: {
         type: Schema.Types.ObjectId,
         ref: 'Artist',
-        required: {
+        required: true,
+        validate: {
             validator: async (value: Types.ObjectId) => Artist.findById(value),
             message: 'Artist does not exist',
         },
@@ -23,6 +23,6 @@ const AlbumSchema = new Schema({
     image: String,
 });
 
-const Album = mongoose.model('Album', AlbumSchema);
+const Album = model<AlbumMutation>('Album', AlbumSchema);
 
 export default Album;

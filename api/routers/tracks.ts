@@ -1,33 +1,28 @@
+import {promises as fs} from 'fs';
 import express from "express";
 import mongoose from "mongoose";
 import Track from "../modules/Track";
-import {TrackMutation} from "../types";
 
 const tracksRouter = express.Router();
 
 tracksRouter.post('/', async (req, res, next) => {
-    if (!req.body.album || !req.body.name || !req.body.trackNumber || !req.body.url) {
-        return res.status(400).send({error: 'All fields are required'});
-    }
-
-    const trackData: TrackMutation = {
-        album: req.body.album,
-        name: req.body.name,
-        duration: req.body.duration,
-        trackNumber: req.body.trackNumber,
-        url: req.body.url,
-    };
-
-    const track = new Track(trackData);
-
     try {
-        await track.save();
+        const track = await Track.create({
+            album: req.body.album,
+            name: req.body.name,
+            duration: req.body.duration,
+            trackNumber: req.body.trackNumber,
+            url: req.body.url,
+        });
         return res.send(track);
     } catch (e) {
+        if (req.file) {
+            await fs.unlink(req.file.path);
+        }
         if (e instanceof mongoose.Error.ValidationError) {
             return res.status(400).send(e);
         } else {
-            next(e);
+            return next(e);
         }
     }
 });
@@ -41,7 +36,11 @@ tracksRouter.get('/', async (req, res, next) => {
                 return res.status(404).send({error: 'Not found'});
             }
 
-            return res.send(album);
+            const tracks = album.sort((a, b) => {
+                return a.trackNumber < b.trackNumber ? -1 : 1;
+            });
+
+            return res.send(tracks);
         } catch (e) {
             return res.status(404).send({error: 'Not found'});
         }

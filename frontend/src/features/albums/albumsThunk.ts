@@ -8,13 +8,10 @@ export const fetchAlbumsById = createAsyncThunk<AlbumId, string>(
     async (id) => {
         try {
             const response = await axiosApi.get<Album[]>('/albums?artist=' + id);
-            const albums = response.data.sort((a, b) => {
-                return a.releaseDate < b.releaseDate ? 1 : -1;
-            });
             const artist = response.data[0].artist.name;
 
             return {
-                album: albums,
+                album: response.data,
                 artist,
             }
         } catch (e){
