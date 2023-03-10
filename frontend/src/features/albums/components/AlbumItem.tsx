@@ -84,38 +84,40 @@ const AlbumItem: React.FC<Props> = ({album}) => {
                         </IconButton>
                     </Box>
                     {user && user.role === 'admin' && !album.isPublished &&
-                        <Box>
-                            <Typography variant='h6' sx={{color: 'red', pl: 2}}>
-                                Its not published!
-                            </Typography>
-                            <Grid container direction='row' justifyContent='space-around' sx={{m: 1}}>
-                                <Grid item>
-                                    <LoadingButton
-                                        type='button'
-                                        color='error'
-                                        variant='contained'
-                                        onClick={() => deleteAlbumHandle(album._id)}
-                                        loading={deleteLoading ? deleteLoading === album._id : false}
-                                        disabled={publishLoading ? publishLoading === album._id : false}
-                                    >
-                                        delete
-                                    </LoadingButton>
-                                </Grid>
-                                <Grid item>
-                                    <LoadingButton
-                                        type='button'
-                                        color='primary'
-                                        variant='contained'
-                                        disabled={deleteLoading ? deleteLoading === album._id : false}
-                                        loading={publishLoading ? publishLoading === album._id : false}
-                                        onClick={() => publishAlbumHande(album._id)}
-                                    >
-                                        publish
-                                    </LoadingButton>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    }
+                        <Typography variant='h6' sx={{color: 'red', pl: 2}}>
+                            Its not published!
+                        </Typography>}
+
+                    <Grid container direction='row' justifyContent='space-around' sx={{m: 1}}>
+                        <Grid item>
+                            {user && user.role === 'admin' &&
+                                <LoadingButton
+                                    type='button'
+                                    color='error'
+                                    variant='contained'
+                                    onClick={() => deleteAlbumHandle(album._id)}
+                                    loading={deleteLoading ? deleteLoading === album._id : false}
+                                    disabled={publishLoading ? publishLoading === album._id : false}
+                                >
+                                    delete
+                                </LoadingButton>
+                            }
+                        </Grid>
+                        <Grid item>
+                            {user && !album.isPublished &&
+                                <LoadingButton
+                                    type='button'
+                                    color='primary'
+                                    variant='contained'
+                                    disabled={deleteLoading ? deleteLoading === album._id : false}
+                                    loading={publishLoading ? publishLoading === album._id : false}
+                                    onClick={() => publishAlbumHande(album._id)}
+                                >
+                                    publish
+                                </LoadingButton>
+                            }
+                        </Grid>
+                    </Grid>
                 </Box>
                 <CardMedia
                     component="img"

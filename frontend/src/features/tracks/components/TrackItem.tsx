@@ -116,9 +116,9 @@ const TrackItem: React.FC<Props> = ({song}) => {
                         </Grid>
                     </Grid>
                     <Grid item xs>
-                        {user && user.role === 'admin' && !song.isPublished &&
-                            <Grid container direction='row' justifyContent='space-around' sx={{m: 1}}>
-                                <Grid item>
+                        <Grid container direction='row' justifyContent='space-around' sx={{m: 1}}>
+                            <Grid item>
+                                {user && user.role === 'admin' &&
                                     <LoadingButton
                                         type='button'
                                         color='error'
@@ -129,8 +129,10 @@ const TrackItem: React.FC<Props> = ({song}) => {
                                     >
                                         delete
                                     </LoadingButton>
-                                </Grid>
-                                <Grid item>
+                                }
+                            </Grid>
+                            <Grid item>
+                                {user && !song.isPublished &&
                                     <LoadingButton
                                         type='button'
                                         color='primary'
@@ -141,9 +143,9 @@ const TrackItem: React.FC<Props> = ({song}) => {
                                     >
                                         publish
                                     </LoadingButton>
-                                </Grid>
+                                }
                             </Grid>
-                        }
+                        </Grid>
                     </Grid>
                 </Grid>
             </Card>

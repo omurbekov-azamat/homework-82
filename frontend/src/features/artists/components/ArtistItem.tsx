@@ -61,34 +61,36 @@ const ArtistItem: React.FC<Props> = ({singer}) => {
                 </Grid>
                 <ImageCardMedia image={cardImage} title={singer.name}/>
             </Card>
-            {user && user.role === 'admin' && !singer.isPublished &&
                 <Grid container direction='row' justifyContent='space-around' sx={{m: 1}}>
                     <Grid item>
-                        <LoadingButton
-                            type='button'
-                            color='error'
-                            variant='contained'
-                            onClick={() => deleteArtist(singer._id)}
-                            loading={deleteLoading ? deleteLoading === singer._id : false}
-                            disabled={publishLoading ? publishLoading === singer._id : false}
-                        >
-                            delete
-                        </LoadingButton>
+                        {user && user.role === 'admin' &&
+                            <LoadingButton
+                                type='button'
+                                color='error'
+                                variant='contained'
+                                onClick={() => deleteArtist(singer._id)}
+                                loading={deleteLoading ? deleteLoading === singer._id : false}
+                                disabled={publishLoading ? publishLoading === singer._id : false}
+                            >
+                                delete
+                            </LoadingButton>
+                        }
                     </Grid>
                     <Grid item>
-                        <LoadingButton
-                            type='button'
-                            color='primary'
-                            variant='contained'
-                            disabled={deleteLoading ? deleteLoading === singer._id : false}
-                            loading={publishLoading ? publishLoading === singer._id : false}
-                            onClick={() => publishArtist(singer._id)}
-                        >
-                            publish
-                        </LoadingButton>
+                        {user && !singer.isPublished &&
+                            <LoadingButton
+                                type='button'
+                                color='primary'
+                                variant='contained'
+                                disabled={deleteLoading ? deleteLoading === singer._id : false}
+                                loading={publishLoading ? publishLoading === singer._id : false}
+                                onClick={() => publishArtist(singer._id)}
+                            >
+                                publish
+                            </LoadingButton>
+                        }
                     </Grid>
                 </Grid>
-            }
         </Grid>
     );
 };
