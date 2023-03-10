@@ -35,11 +35,12 @@ export const fetchAlbumsById = createAsyncThunk<AlbumId, string>(
         try {
             const response = await axiosApi.get<Album[]>('/albums?artist=' + id);
             const artist = response.data[0].artist.name;
-
+            const albumId = response.data[0]._id;
             return {
                 album: response.data,
                 artist,
-                artistId: id
+                artistId: id,
+                albumId,
             }
         } catch (e){
             if (isAxiosError(e) && e.response && e.response.status === 404) {

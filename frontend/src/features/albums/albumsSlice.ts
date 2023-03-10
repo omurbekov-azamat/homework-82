@@ -7,6 +7,7 @@ interface AlbumsState {
     albums: Album[];
     artist: string | null;
     artistId: string | null;
+    albumId: string | null;
     fetchLoading: boolean;
     albumError: ValidationError | null;
     createAlbumLoading: boolean;
@@ -18,6 +19,7 @@ const initialState: AlbumsState = {
     albums: [],
     artist: null,
     artistId: null,
+    albumId: null,
     fetchLoading: false,
     albumError: null,
     createAlbumLoading: false,
@@ -34,6 +36,7 @@ export const albumsSlice = createSlice({
             state.albums = [];
             state.artist = null;
             state.artistId = null;
+            state.albumId = null;
             state.fetchLoading = true;
         });
         builder.addCase(fetchAlbumsById.fulfilled, (state, {payload: data}) => {
@@ -41,6 +44,7 @@ export const albumsSlice = createSlice({
             state.albums = data.album;
             state.artist = data.artist;
             state.artistId = data.artistId;
+            state.albumId = data.albumId;
         });
         builder.addCase(fetchAlbumsById.rejected, (state) => {
             state.fetchLoading = false;
@@ -86,3 +90,4 @@ export const selectAlbumError = (state: RootState) => state.albums.albumError;
 export const selectDeleteAlbumLoading = (state: RootState) => state.albums.deleteAlbumLoading;
 export const selectPublishAlbumLoading = (state: RootState) => state.albums.publishAlbumLoading;
 export const selectArtistId = (state: RootState) => state.albums.artistId;
+export const selectAlbumId = (state: RootState) => state.albums.albumId;

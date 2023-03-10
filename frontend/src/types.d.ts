@@ -27,12 +27,14 @@ export interface Track {
     name: string;
     trackNumber: number;
     url: string;
+    isPublished: boolean;
 }
 
 export interface AlbumId {
     album: Album[];
     artist: string;
     artistId: string;
+    albumId: string;
 }
 
 export interface ArtistWithTrack {

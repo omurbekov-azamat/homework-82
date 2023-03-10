@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store";
-import {createTrack, fetchTracksFromAlbumById} from "./tracksThunk";
+import {createTrack, deleteTrack, fetchTracksFromAlbumById, publishTrack} from "./tracksThunk";
 import {Artist, Track, ValidationError} from "../../types";
 
 interface TracksState {
@@ -10,6 +10,8 @@ interface TracksState {
     fetchLoading: boolean;
     trackError: ValidationError | null;
     createTrackLoading: boolean;
+    deleteTrackLoading: string | false;
+    publishTrackLoading: string | false;
 }
 
 const initialState: TracksState = {
@@ -19,6 +21,8 @@ const initialState: TracksState = {
     fetchLoading: false,
     trackError: null,
     createTrackLoading: false,
+    deleteTrackLoading: false,
+    publishTrackLoading: false,
 };
 
 export const tracksSlice = createSlice({
@@ -49,6 +53,24 @@ export const tracksSlice = createSlice({
             state.createTrackLoading = false;
             state.trackError = error || null;
         });
+        builder.addCase(deleteTrack.pending, (state, {meta}) => {
+            state.deleteTrackLoading = meta.arg;
+        });
+        builder.addCase(deleteTrack.fulfilled, (state) => {
+            state.deleteTrackLoading = false;
+        });
+        builder.addCase(deleteTrack.rejected, (state) => {
+            state.deleteTrackLoading = false;
+        });
+        builder.addCase(publishTrack.pending, (state, {meta}) => {
+            state.publishTrackLoading = meta.arg;
+        });
+        builder.addCase(publishTrack.fulfilled, (state) => {
+            state.publishTrackLoading = false;
+        });
+        builder.addCase(publishTrack.rejected, (state) => {
+            state.publishTrackLoading = false;
+        });
     }
 });
 
@@ -60,3 +82,5 @@ export const selectAlbum = (state: RootState) => state.tracks.album;
 export const selectTracksFetching = (state: RootState) => state.tracks.fetchLoading;
 export const selectCreateTrackLoading = (state: RootState) => state.tracks.createTrackLoading;
 export const selectTrackError = (state: RootState) => state.tracks.trackError;
+export const selectDeleteTrackLoading = (state: RootState) => state.tracks.deleteTrackLoading;
+export const selectPublishTrackLoading = (state: RootState) => state.tracks.publishTrackLoading;
