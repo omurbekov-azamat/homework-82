@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {createArtist, fetchArtists} from "./artistsThunk";
+import {createArtist, deleteSinger, fetchArtists, publishSinger} from "./artistsThunk";
 import {RootState} from "../../app/store";
 import {Artist, ValidationError} from "../../types";
 
@@ -8,6 +8,8 @@ interface ArtistsState {
     fetchLoading: boolean,
     artistError: ValidationError | null;
     createArtistLoading: boolean;
+    deleteArtistLoading: boolean;
+    publishArtistLoading: boolean;
 }
 
 const initialState: ArtistsState = {
@@ -15,6 +17,8 @@ const initialState: ArtistsState = {
     fetchLoading: false,
     artistError: null,
     createArtistLoading: false,
+    deleteArtistLoading: false,
+    publishArtistLoading: false,
 };
 
 export const artistsSlice = createSlice({
@@ -43,6 +47,24 @@ export const artistsSlice = createSlice({
             state.createArtistLoading = false;
             state.artistError = error || null;
         });
+        builder.addCase(deleteSinger.pending, (state) => {
+            state.deleteArtistLoading = true;
+        });
+        builder.addCase(deleteSinger.fulfilled, (state) => {
+            state.deleteArtistLoading = false;
+        });
+        builder.addCase(deleteSinger.rejected, (state) => {
+            state.deleteArtistLoading = false;
+        });
+        builder.addCase(publishSinger.pending, (state) => {
+            state.publishArtistLoading = true;
+        });
+        builder.addCase(publishSinger.fulfilled, (state) => {
+            state.publishArtistLoading = false;
+        });
+        builder.addCase(publishSinger.rejected, (state) => {
+            state.publishArtistLoading = false;
+        });
     }
 });
 
@@ -52,3 +74,5 @@ export const selectArtists = (state: RootState) => state.artists.artists;
 export const selectArtistsFetching = (state: RootState) => state.artists.fetchLoading;
 export const selectCreateArtistLoading = (state: RootState) => state.artists.createArtistLoading;
 export const selectArtistError = (state: RootState) => state.artists.artistError;
+export const selectDeleteArtistLoading = (state: RootState) => state.artists.deleteArtistLoading;
+export const selectPublishArtistLoading = (state: RootState) => state.artists.publishArtistLoading;

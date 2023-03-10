@@ -61,12 +61,12 @@ artistsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
 
         const album = await Album.find({artist: artist._id});
 
-        if (!album) {
+        if (album.length === 0) {
             await Artist.deleteOne(artist._id);
             return res.send({message: "Delete was successfully!"});
         }
 
-        return res.status(404).send({error: 'Artist have albums and tracks u can not delete!'})
+        return res.status(403).send({message: 'You can not delete, artist has albums and songs!'});
     } catch (e) {
         return next(e);
     }
