@@ -39,8 +39,8 @@ const ArtistItem: React.FC<Props> = ({singer}) => {
         cardImage = apiURL + '/' + singer.image;
     }
 
-    const deleteArtist = (id: string) => {
-        dispatch(deleteSinger(id));
+    const deleteArtist = async (id: string) => {
+        await dispatch(deleteSinger(id))
     };
 
     const publishArtist = (id: string) => {
@@ -55,13 +55,13 @@ const ArtistItem: React.FC<Props> = ({singer}) => {
                         <CardHeader title={singer.name}/>
                     </Grid>
                     <Grid item>
-                        {user && user.role === 'admin' && singer.isPublished === false &&
+                        {user && user.role === 'admin' && !singer.isPublished &&
                             <CardHeader sx={{color: 'red'}} title='Its not published'/>}
                     </Grid>
                 </Grid>
                 <ImageCardMedia image={cardImage} title={singer.name}/>
             </Card>
-            {user && user.role === 'admin' && singer.isPublished === false &&
+            {user && user.role === 'admin' && !singer.isPublished &&
                 <Grid container direction='row' justifyContent='space-around' sx={{m: 1}}>
                     <Grid item>
                         <LoadingButton
@@ -69,8 +69,8 @@ const ArtistItem: React.FC<Props> = ({singer}) => {
                             color='error'
                             variant='contained'
                             onClick={() => deleteArtist(singer._id)}
-                            loading={deleteLoading}
-                            disabled={publishLoading}
+                            loading={deleteLoading ? deleteLoading === singer._id : false}
+                            disabled={publishLoading ? publishLoading === singer._id : false}
                         >
                             delete
                         </LoadingButton>
@@ -80,8 +80,8 @@ const ArtistItem: React.FC<Props> = ({singer}) => {
                             type='button'
                             color='primary'
                             variant='contained'
-                            disabled={deleteLoading}
-                            loading={publishLoading}
+                            disabled={deleteLoading ? deleteLoading === singer._id : false}
+                            loading={publishLoading ? publishLoading === singer._id : false}
                             onClick={() => publishArtist(singer._id)}
                         >
                             publish

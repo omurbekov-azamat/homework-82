@@ -8,8 +8,8 @@ interface ArtistsState {
     fetchLoading: boolean,
     artistError: ValidationError | null;
     createArtistLoading: boolean;
-    deleteArtistLoading: boolean;
-    publishArtistLoading: boolean;
+    deleteArtistLoading: string | false;
+    publishArtistLoading: string | false;
 }
 
 const initialState: ArtistsState = {
@@ -47,8 +47,8 @@ export const artistsSlice = createSlice({
             state.createArtistLoading = false;
             state.artistError = error || null;
         });
-        builder.addCase(deleteSinger.pending, (state) => {
-            state.deleteArtistLoading = true;
+        builder.addCase(deleteSinger.pending, (state, {meta}) => {
+            state.deleteArtistLoading = meta.arg;
         });
         builder.addCase(deleteSinger.fulfilled, (state) => {
             state.deleteArtistLoading = false;
@@ -56,8 +56,8 @@ export const artistsSlice = createSlice({
         builder.addCase(deleteSinger.rejected, (state) => {
             state.deleteArtistLoading = false;
         });
-        builder.addCase(publishSinger.pending, (state) => {
-            state.publishArtistLoading = true;
+        builder.addCase(publishSinger.pending, (state,{meta}) => {
+            state.publishArtistLoading = meta.arg;
         });
         builder.addCase(publishSinger.fulfilled, (state) => {
             state.publishArtistLoading = false;

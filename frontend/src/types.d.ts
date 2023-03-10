@@ -14,6 +14,7 @@ export interface Album {
     image: string | null;
     name: string;
     releaseDate: string;
+    isPublished: boolean;
 }
 
 export interface Track {
@@ -31,6 +32,7 @@ export interface Track {
 export interface AlbumId {
     album: Album[];
     artist: string;
+    artistId: string;
 }
 
 export interface ArtistWithTrack {

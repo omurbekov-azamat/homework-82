@@ -39,11 +39,37 @@ export const fetchAlbumsById = createAsyncThunk<AlbumId, string>(
             return {
                 album: response.data,
                 artist,
+                artistId: id
             }
         } catch (e){
             if (isAxiosError(e) && e.response && e.response.status === 404) {
                 alert(e.response.data.error);
             }
+            throw e;
+        }
+    }
+);
+
+export const deleteAlbum = createAsyncThunk<void, string>(
+    'albums/deleteAlbum',
+    async (id) => {
+        try {
+            await axiosApi.delete('/albums/' + id);
+        } catch (e) {
+            if (isAxiosError(e) && e.response && e.response.status === 403) {
+                return alert(e.response.data.message);
+            }
+            throw e;
+        }
+    }
+);
+
+export const publishAlbum = createAsyncThunk<void, string>(
+    'albums/publishAlbum',
+    async (id) => {
+        try {
+            await axiosApi.patch('/albums/' + id + '/togglePublished');
+        } catch (e) {
             throw e;
         }
     }

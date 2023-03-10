@@ -14,7 +14,7 @@ const ArtistsItems: React.FC<Props> = ({singers}) => {
     let artists = singers;
 
     if (user && user.role === 'user' || !user) {
-        artists = singers.filter(artist => artist.isPublished === true);
+        artists = singers.filter(artist => artist.isPublished);
     }
 
     return (

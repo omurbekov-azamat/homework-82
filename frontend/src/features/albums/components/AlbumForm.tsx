@@ -8,12 +8,14 @@ import {LoadingButton} from "@mui/lab";
 import {AlbumMutation} from "../../../types";
 import {selectAlbumError, selectCreateAlbumLoading} from "../albumsSlice";
 import {createAlbum} from "../albumsThunk";
+import {useNavigate} from "react-router-dom";
 
 const AlbumForm = () => {
     const dispatch = useAppDispatch()
     const artists = useAppSelector(selectArtists);
     const loading = useAppSelector(selectCreateAlbumLoading);
     const error = useAppSelector(selectAlbumError);
+    const navigate = useNavigate();
     const [state, setState] = useState<AlbumMutation>({
         artist: '',
         name: '',
@@ -32,7 +34,8 @@ const AlbumForm = () => {
 
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
-        dispatch(createAlbum(state));
+        await dispatch(createAlbum(state)).unwrap();
+        await navigate('/artists');
     };
 
     const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

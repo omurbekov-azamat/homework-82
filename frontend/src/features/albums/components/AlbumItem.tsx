@@ -13,6 +13,11 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import {Grid, styled} from "@mui/material";
 import {apiURL} from "../../../constants";
 import noImageAvailable from "../../../assets/images/noImageAvailable.jpg";
+import {useAppDispatch, useAppSelector} from "../../../app/hook";
+import {selectUser} from "../../user/userSlice";
+import {LoadingButton} from "@mui/lab";
+import {deleteAlbum, fetchAlbumsById, publishAlbum} from "../albumsThunk";
+import {selectArtistId, selectDeleteAlbumLoading, selectPublishAlbumLoading} from "../albumsSlice";
 import {Album} from "../../../types";
 
 export const Link = styled(NavLink)({
@@ -28,6 +33,12 @@ interface Props {
 }
 
 const AlbumItem: React.FC<Props> = ({album}) => {
+    const dispatch = useAppDispatch();
+    const user = useAppSelector(selectUser);
+    const artistId = useAppSelector(selectArtistId);
+    const deleteLoading = useAppSelector(selectDeleteAlbumLoading);
+    const publishLoading = useAppSelector(selectPublishAlbumLoading);
+
     const theme = useTheme();
 
     let cardImage = noImageAvailable;
@@ -35,12 +46,25 @@ const AlbumItem: React.FC<Props> = ({album}) => {
     if (album.image) {
         cardImage = apiURL + '/' + album.image;
     }
+    const deleteAlbumHandle = async (id: string) => {
+        await dispatch(deleteAlbum(id));
+        if (artistId) {
+            await dispatch(fetchAlbumsById(artistId));
+        }
+    };
+
+    const publishAlbumHande = async (id: string) => {
+        await dispatch(publishAlbum(id));
+        if (artistId) {
+            await dispatch(fetchAlbumsById(artistId));
+        }
+    };
 
     return (
-        <Grid item sx={{width: '600px'}} component={Link} to={'/albums/' + album._id}>
+        <Grid item sx={{width: '600px'}}>
             <Card sx={{display: 'flex', justifyContent: 'space-between'}}>
                 <Box sx={{display: 'flex', flexDirection: 'column'}}>
-                    <CardContent sx={{flex: '1 0 auto'}}>
+                    <CardContent sx={{flex: '1 0 auto'}} component={Link} to={'/albums/' + album._id}>
                         <Typography component="div" variant="h5">
                             {album.name}
                         </Typography>
@@ -59,6 +83,39 @@ const AlbumItem: React.FC<Props> = ({album}) => {
                             {theme.direction === 'rtl' ? <SkipPreviousIcon/> : <SkipNextIcon/>}
                         </IconButton>
                     </Box>
+                    {user && user.role === 'admin' && !album.isPublished &&
+                        <Box>
+                            <Typography variant='h6' sx={{color: 'red', pl: 2}}>
+                                Its not published!
+                            </Typography>
+                            <Grid container direction='row' justifyContent='space-around' sx={{m: 1}}>
+                                <Grid item>
+                                    <LoadingButton
+                                        type='button'
+                                        color='error'
+                                        variant='contained'
+                                        onClick={() => deleteAlbumHandle(album._id)}
+                                        loading={deleteLoading ? deleteLoading === album._id : false}
+                                        disabled={publishLoading ? publishLoading === album._id : false}
+                                    >
+                                        delete
+                                    </LoadingButton>
+                                </Grid>
+                                <Grid item>
+                                    <LoadingButton
+                                        type='button'
+                                        color='primary'
+                                        variant='contained'
+                                        disabled={deleteLoading ? deleteLoading === album._id : false}
+                                        loading={publishLoading ? publishLoading === album._id : false}
+                                        onClick={() => publishAlbumHande(album._id)}
+                                    >
+                                        publish
+                                    </LoadingButton>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    }
                 </Box>
                 <CardMedia
                     component="img"
