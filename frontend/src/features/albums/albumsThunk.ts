@@ -42,7 +42,7 @@ export const fetchAlbumsById = createAsyncThunk<AlbumId, string>(
             }
         } catch (e){
             if (isAxiosError(e) && e.response && e.response.status === 404) {
-               alert(e.response.data.error);
+                alert(e.response.data.error);
             }
             throw e;
         }

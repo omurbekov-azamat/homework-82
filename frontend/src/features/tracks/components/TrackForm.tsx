@@ -3,15 +3,19 @@ import {Grid, MenuItem, TextField, Typography} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../../app/hook";
 import {selectAlbums} from "../../albums/albumsSlice";
 import {fetchArtists} from "../../artists/artistsThunk";
-import {selectArtists} from "../../artists/artistsSlice";
 import {fetchAlbumsById} from "../../albums/albumsThunk";
 import {LoadingButton} from "@mui/lab";
+import {selectCreateTrackLoading, selectTrackError} from "../tracksSlice";
+import {selectArtists} from "../../artists/artistsSlice";
+import {createTrack} from "../tracksThunk";
 import {TrackMutation} from "../../../types";
 
 const TrackForm = () => {
     const dispatch = useAppDispatch();
     const artists = useAppSelector(selectArtists);
     const albums = useAppSelector(selectAlbums);
+    const loading = useAppSelector(selectCreateTrackLoading);
+    const error = useAppSelector(selectTrackError);
     const [state, setState] = useState<TrackMutation>({
         artist: '',
         album: '',
@@ -25,8 +29,8 @@ const TrackForm = () => {
         dispatch(fetchArtists());
     }, [dispatch]);
 
-    const getAlbums = (id: string) => {
-        dispatch(fetchAlbumsById(id));
+    const getAlbums = async (id: string) => {
+        await dispatch(fetchAlbumsById(id)).unwrap();
     };
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +40,15 @@ const TrackForm = () => {
 
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(state)
+        dispatch(createTrack(state));
+    };
+
+    const getFieldError = (fieldName: string) => {
+        try {
+            return error?.errors[fieldName].message;
+        } catch {
+            return undefined;
+        }
     };
 
     return (
@@ -74,6 +86,9 @@ const TrackForm = () => {
                         value={state.album}
                         onChange={inputChangeHandler}
                         sx={{width: '235px'}}
+                        error={Boolean(getFieldError('album'))}
+                        helperText={getFieldError('album')}
+                        required
                     >
                         <MenuItem value='' disabled>Please select album</MenuItem>
                         {albums.map(artist => (
@@ -92,6 +107,9 @@ const TrackForm = () => {
                         value={state.name}
                         onChange={inputChangeHandler}
                         name='name'
+                        error={Boolean(getFieldError('name'))}
+                        helperText={getFieldError('name')}
+                        required
                     />
                 </Grid>
                 <Grid item xs>
@@ -100,6 +118,8 @@ const TrackForm = () => {
                         value={state.duration}
                         onChange={inputChangeHandler}
                         name='duration'
+                        error={Boolean(getFieldError('duration'))}
+                        helperText={getFieldError('duration')}
                     />
                 </Grid>
                 <Grid item xs>
@@ -109,6 +129,9 @@ const TrackForm = () => {
                         onChange={inputChangeHandler}
                         name='trackNumber'
                         type='number'
+                        error={Boolean(getFieldError('trackNumber'))}
+                        helperText={getFieldError('trackNumber')}
+                        required
                     />
                 </Grid>
                 <Grid item xs>
@@ -117,6 +140,8 @@ const TrackForm = () => {
                         value={state.url}
                         onChange={inputChangeHandler}
                         name='url'
+                        error={Boolean(getFieldError('url'))}
+                        helperText={getFieldError('url')}
                     />
                 </Grid>
                 <Grid item xs>
@@ -124,6 +149,7 @@ const TrackForm = () => {
                         type='submit'
                         color='secondary'
                         variant='outlined'
+                        loading={loading}
                     >
                         Create
                     </LoadingButton>
