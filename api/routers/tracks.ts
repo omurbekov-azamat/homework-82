@@ -5,6 +5,7 @@ import Track from "../modules/Track";
 import auth from "../middleware/auth";
 import permit from "../middleware/permit";
 import {TrackMutation} from "../types";
+import User from "../modules/User";
 
 const tracksRouter = express.Router();
 
@@ -31,19 +32,38 @@ tracksRouter.post('/', auth, async (req, res, next) => {
 });
 
 tracksRouter.get('/', async (req, res, next) => {
+    const token = req.get('Authorization');
     if (req.query.album) {
         try {
-            const album = await Track.find({album: req.query.album}).populate('album');
-
-            if (!album) {
-                return res.status(404).send({error: 'Not found'});
+            if (!token) {
+                const tracks = await Track.find({isPublished: true, album: req.query.album}).populate('album');
+                if (!tracks) {
+                    return res.status(404).send({error: 'Tracks are not found'});
+                }
+                return res.send(tracks);
             }
 
-            const tracks = album.sort((a, b) => {
-                return a.trackNumber < b.trackNumber ? -1 : 1;
-            });
+            const user = await User.findOne({token});
 
-            return res.send(tracks);
+            if (!user) {
+                return res.status(401).send({error: 'Wrong token!'});
+            }
+
+            if (user.role === 'user') {
+                const tracks = await Track.find({isPublished: true, album: req.query.album}).populate('album');
+                if (!tracks) {
+                    return res.status(404).send({error: 'Tracks are not found'});
+                }
+                return res.send(tracks);
+            }
+
+            if (user.role === 'admin') {
+                const tracks = await Track.find({album: req.query.album}).populate('album');
+                if (!tracks) {
+                    return res.status(404).send({error: 'Tracks are not found'});
+                }
+                return res.send(tracks);
+            }
         } catch (e) {
             return res.status(404).send({error: 'Not found'});
         }
