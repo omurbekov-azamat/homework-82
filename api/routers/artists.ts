@@ -7,7 +7,6 @@ import auth from "../middleware/auth";
 import permit from "../middleware/permit";
 import Album from "../modules/Album";
 import User from "../modules/User";
-import artist from "../modules/Artist";
 import {ArtistMutation} from "../types";
 
 const artistsRouter = express.Router();
@@ -34,13 +33,12 @@ artistsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, nex
 
 artistsRouter.get('/', async (req, res) => {
     const token = req.get('Authorization');
-
     if (req.query.artist) {
         try {
             if (!token) {
                 const artist = await Artist.find({isPublished: true, _id: req.query.artist});
                 if (!artist) {
-                    return res.status(404).send({error: 'Not found'});
+                    return res.status(404).send({error: 'Artist is not found'});
                 }
                 return res.send(artist);
             }
@@ -52,13 +50,19 @@ artistsRouter.get('/', async (req, res) => {
             }
 
             if (user.role === 'user') {
-                const artists = await Artist.find({isPublished: true, _id: req.query.artist});
-                return res.send(artists);
+                const artist = await Artist.find({isPublished: true, _id: req.query.artist});
+                if (!artist) {
+                    return res.status(404).send({error: 'Artist is not found'});
+                }
+                return res.send(artist);
             }
 
             if (user.role === 'admin') {
-                const artists = await artist.findById(req.query.artist);
-                return res.send(artists);
+                const artist = await Artist.findById(req.query.artist);
+                if (!artist) {
+                    return res.status(404).send({error: 'Artist is not found'});
+                }
+                return res.send(artist);
             }
         } catch (e) {
             return res.status(404).send({error: 'Not found'});
@@ -67,6 +71,9 @@ artistsRouter.get('/', async (req, res) => {
     try {
         if (!token) {
             const artists = await Artist.find({isPublished: true});
+            if (!artists) {
+                return res.status(404).send({error: 'Artists is not found'});
+            }
             return res.send(artists);
         }
 
@@ -78,11 +85,17 @@ artistsRouter.get('/', async (req, res) => {
 
         if (user.role === 'user') {
             const artists = await Artist.find({isPublished: true});
+            if (!artists) {
+                return res.status(404).send({error: 'Artists is not found'});
+            }
             return res.send(artists);
         }
 
         if (user.role === 'admin') {
-            const artists = await artist.find();
+            const artists = await Artist.find();
+            if (!artists) {
+                return res.status(404).send({error: 'Artists is not found'});
+            }
             return res.send(artists);
         }
     } catch (e) {

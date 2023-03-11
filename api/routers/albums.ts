@@ -6,11 +6,13 @@ import Album from "../modules/Album";
 import auth from "../middleware/auth";
 import permit from "../middleware/permit";
 import Track from "../modules/Track";
+import User from "../modules/User";
+import artist from "../modules/Artist";
 import {AlbumMutation} from "../types";
 
 const albumsRouter = express.Router();
 
-albumsRouter.post('/', auth,  imagesUpload.single('image'), async (req, res, next) => {
+albumsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, next) => {
     try {
         const album = await Album.create({
             artist: req.body.artist,
@@ -32,26 +34,72 @@ albumsRouter.post('/', auth,  imagesUpload.single('image'), async (req, res, nex
 });
 
 albumsRouter.get('/', async (req, res, next) => {
+    const token = req.get('Authorization');
     if (req.query.artist) {
         try {
-            const albums = await Album.find({artist: req.query.artist}).populate('artist');
-
-            if (!albums) {
-                return res.status(404).send({error: 'Not Found!'});
+            if (!token) {
+                const album = await Album.find({isPublished: true, artist: req.query.artist}).populate('artist');
+                if (!album) {
+                    return res.status(404).send({error: 'Album is not found'});
+                }
+                return res.send(album);
             }
 
-            const artistAlbums = albums.sort((a, b) => {
-                return a.releaseDate < b.releaseDate ? 1 : -1;
-            });
+            const user = await User.findOne({token});
 
-            return res.send(artistAlbums);
+            if (!user) {
+                return res.status(401).send({error: 'Wrong token!'});
+            }
+
+            if (user.role === 'user') {
+                const album = await Album.find({isPublished: true, artist: req.query.artist});
+                if (!album) {
+                    return res.status(404).send({error: 'Album is not found'});
+                }
+                return res.send(album);
+            }
+
+            if (user.role === 'admin') {
+                const album = await Album.find({artist: req.query.artist});
+                if (!album) {
+                    return res.status(404).send({error: 'Album is not found'});
+                }
+                return res.send(album);
+            }
         } catch (e) {
             return res.status(404).send({error: 'Not Found!'});
         }
     } else {
         try {
-            const albums = await Album.find();
-            return res.send(albums);
+            if (!token) {
+                const albums = await Album.find({isPublished: true});
+                if (!albums) {
+                    return res.status(404).send({error: 'Albums is not found'});
+                }
+                return res.send(albums);
+            }
+
+            const user = await User.findOne({token});
+
+            if (!user) {
+                return res.status(401).send({error: 'Wrong token!'});
+            }
+
+            if (user.role === 'user') {
+                const albums = await Album.find({isPublished: true});
+                if (!albums) {
+                    return res.status(404).send({error: 'Albums is not found'});
+                }
+                return res.send(albums);
+            }
+
+            if (user.role === 'admin') {
+                const albums = await Album.find();
+                if (!albums) {
+                    return res.status(404).send({error: 'Albums is not found'});
+                }
+                return res.send(albums);
+            }
         } catch (e) {
             return next(e);
         }
@@ -59,17 +107,40 @@ albumsRouter.get('/', async (req, res, next) => {
 });
 
 albumsRouter.get('/:id', async (req, res, next) => {
-   try {
-       const result = await Album.findById(req.params.id).populate('artist');
+    const token = req.get('Authorization');
+    try {
+        if (!token) {
+            const album = await Album.find({isPublished: true, _id: req.params.id}).populate('artist');
+            if (!album) {
+                return res.status(404).send({error: 'Album is not found'});
+            }
+            return res.send(album);
+        }
 
-       if (!result) {
-           return res.status(404).send({error: 'Not found!'});
-       }
+        const user = await User.findOne({token});
 
-       return res.send(result);
-   } catch (e) {
-       return next(e);
-   }
+        if (!user) {
+            return res.status(401).send({error: 'Wrong token!'});
+        }
+
+        if (user.role === 'user') {
+            const album = await Album.find({isPublished: true, _id: req.params.id}).populate('artist');
+            if (!album) {
+                return res.status(404).send({error: 'Album is not found'});
+            }
+            return res.send(album);
+        }
+
+        if (user.role === 'admin') {
+            const album = await Album.findById(req.params.id).populate('artist');
+            if (!album) {
+                return res.status(404).send({error: 'Album is not found'});
+            }
+            return res.send(album);
+        }
+    } catch (e) {
+        return next(e);
+    }
 });
 
 albumsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
