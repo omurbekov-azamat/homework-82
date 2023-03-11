@@ -6,6 +6,8 @@ import Artist from "../modules/Artist";
 import auth from "../middleware/auth";
 import permit from "../middleware/permit";
 import Album from "../modules/Album";
+import User from "../modules/User";
+import artist from "../modules/Artist";
 import {ArtistMutation} from "../types";
 
 const artistsRouter = express.Router();
@@ -31,21 +33,58 @@ artistsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, nex
 });
 
 artistsRouter.get('/', async (req, res) => {
+    const token = req.get('Authorization');
+
     if (req.query.artist) {
         try {
-            const artist = await Artist.findById(req.query.artist);
-
-            if (!artist) {
-                return res.status(404).send({error: 'Not found'});
+            if (!token) {
+                const artist = await Artist.find({isPublished: true, _id: req.query.artist});
+                if (!artist) {
+                    return res.status(404).send({error: 'Not found'});
+                }
+                return res.send(artist);
             }
-            return res.send(artist);
+
+            const user = await User.findOne({token});
+
+            if (!user) {
+                return res.status(401).send({error: 'Wrong token!'});
+            }
+
+            if (user.role === 'user') {
+                const artists = await Artist.find({isPublished: true, _id: req.query.artist});
+                return res.send(artists);
+            }
+
+            if (user.role === 'admin') {
+                const artists = await artist.findById(req.query.artist);
+                return res.send(artists);
+            }
         } catch (e) {
             return res.status(404).send({error: 'Not found'});
         }
     }
     try {
-        const artists = await Artist.find();
-        return res.send(artists);
+        if (!token) {
+            const artists = await Artist.find({isPublished: true});
+            return res.send(artists);
+        }
+
+        const user = await User.findOne({token});
+
+        if (!user) {
+            return res.status(401).send({error: 'Wrong token!'});
+        }
+
+        if (user.role === 'user') {
+            const artists = await Artist.find({isPublished: true});
+            return res.send(artists);
+        }
+
+        if (user.role === 'admin') {
+            const artists = await artist.find();
+            return res.send(artists);
+        }
     } catch (e) {
         return res.sendStatus(500);
     }
