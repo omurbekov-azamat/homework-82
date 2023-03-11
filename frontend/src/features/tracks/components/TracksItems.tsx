@@ -9,7 +9,7 @@ interface Props {
 
 const TracksItems: React.FC<Props> = ({songs}) => {
     return (
-            <Grid container direction='column' spacing={3}>
+            <Grid container direction='column' spacing={2}>
                 {songs.map(song => (
                     <TrackItem
                         key={song._id}

@@ -8,7 +8,7 @@ interface Props {
 }
 const ArtistsItems: React.FC<Props> = ({singers}) => {
     return (
-        <Grid item direction='row' container spacing={2}>
+        <Grid item direction='row' container spacing={4}>
             {singers.map(singer => (
                 <ArtistItem
                     key={singer._id}

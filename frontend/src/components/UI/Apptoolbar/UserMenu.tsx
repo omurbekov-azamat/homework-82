@@ -5,6 +5,7 @@ import {useAppDispatch, useAppSelector} from "../../../app/hook";
 import {selectLogoutLoading} from "../../../features/user/userSlice";
 import {logout} from "../../../features/user/userThunks";
 import {User} from '../../../types';
+import {fetchArtists} from "../../../features/artists/artistsThunk";
 
 interface Props {
     user: User;
@@ -27,6 +28,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
     const handleLogout = async () => {
         await dispatch(logout());
         await navigate('/artists');
+        await dispatch(fetchArtists());
     };
 
     return (

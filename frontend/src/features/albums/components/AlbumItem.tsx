@@ -87,8 +87,7 @@ const AlbumItem: React.FC<Props> = ({album}) => {
                         <Typography variant='h6' sx={{color: 'red', pl: 2}}>
                             Its not published!
                         </Typography>}
-
-                    <Grid container direction='row' justifyContent='space-around' sx={{m: 1}}>
+                    <Grid container direction='row' justifyContent='space-between' sx={{m: 1}}>
                         <Grid item>
                             {user && user.role === 'admin' &&
                                 <LoadingButton

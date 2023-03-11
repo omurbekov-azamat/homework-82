@@ -9,7 +9,7 @@ interface Props {
 
 const AlbumsItems: React.FC<Props> = ({albums}) => {
     return (
-        <Grid container direction='column' spacing={2}>
+        <Grid container direction='column' spacing={4}>
             {albums.map(album => (
                 <AlbumItem
                     key={album._id}

@@ -61,7 +61,7 @@ const ArtistItem: React.FC<Props> = ({singer}) => {
                 </Grid>
                 <ImageCardMedia image={cardImage} title={singer.name}/>
             </Card>
-                <Grid container direction='row' justifyContent='space-around' sx={{m: 1}}>
+                <Grid container direction='row' justifyContent='space-between' sx={{m: 1}}>
                     <Grid item>
                         {user && user.role === 'admin' &&
                             <LoadingButton

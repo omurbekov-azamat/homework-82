@@ -58,7 +58,7 @@ const TrackItem: React.FC<Props> = ({song}) => {
 
     return (
         <Grid item>
-            <Card sx={{width: '600px'}}>
+            <Card>
                 <Grid container alignItems='center' spacing={2}>
                     <Grid item xs={1}>
                         <Typography variant="subtitle1" color="text.secondary" component="div">
@@ -116,7 +116,7 @@ const TrackItem: React.FC<Props> = ({song}) => {
                         </Grid>
                     </Grid>
                     <Grid item xs>
-                        <Grid container direction='row' justifyContent='space-around' sx={{m: 1}}>
+                        <Grid container direction='row' justifyContent='space-between' sx={{m: 1}}>
                             <Grid item>
                                 {user && user.role === 'admin' &&
                                     <LoadingButton
