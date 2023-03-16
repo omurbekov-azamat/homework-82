@@ -46,12 +46,16 @@ export interface ArtistWithTrack {
 export interface RegisterMutation {
     username: string;
     password: string;
+    displayName: string;
+    image: File | null;
 }
 
 
 export interface User {
     _id: string;
     username: string;
+    displayName: string;
+    avatar: string | null;
     token: string;
     role: string;
 }
@@ -95,8 +99,6 @@ export interface TrackHistoriesMutation {
     user: string;
     _id: string;
 }
-
-
 
 export interface ArtistMutation {
     name: string;

@@ -8,9 +8,10 @@ interface Props {
     label: string;
     type?: string;
     error?: ValidationError | null;
+    margin?: string;
 }
 
-const FileInput: React.FC<Props> = ({onChange, name, label, type, error}) => {
+const FileInput: React.FC<Props> = ({onChange, name, label, type, error,margin}) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [filename, setFilename] = useState('');
@@ -40,7 +41,7 @@ const FileInput: React.FC<Props> = ({onChange, name, label, type, error}) => {
     };
 
     return (
-        <Box sx={{width: '350px'}}>
+        <Box sx={{width: '350px', ml: margin}}>
             <input
                 style={{display: 'none'}}
                 type="file"

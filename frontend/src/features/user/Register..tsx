@@ -7,6 +7,7 @@ import {Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/ma
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {LoadingButton} from "@mui/lab";
 import {RegisterMutation} from '../../types';
+import FileInput from "../../components/UI/FileInput/FileInput";
 
 
 const Register = () => {
@@ -19,11 +20,20 @@ const Register = () => {
     const [state, setState] = useState<RegisterMutation>({
         username: '',
         password: '',
+        displayName: '',
+        image: null,
     });
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target;
         setState(prev => ({...prev, [name]: value}));
+    };
+
+    const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, files} = e.target;
+        setState(prev => ({
+            ...prev, [name]: files && files[0] ? files[0] : null,
+        }));
     };
 
     const submitFormHandler = async (event: React.FormEvent) => {
@@ -87,6 +97,28 @@ const Register = () => {
                                 onChange={inputChangeHandler}
                                 error={Boolean(getFieldError('password'))}
                                 helperText={getFieldError('password')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                name="displayName"
+                                label="displayName"
+                                type="displayName"
+                                autoComplete="new-displayName"
+                                value={state.displayName}
+                                onChange={inputChangeHandler}
+                                error={Boolean(getFieldError('displayName'))}
+                                helperText={getFieldError('displayName')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FileInput
+                                label='avatar'
+                                onChange={fileInputChangeHandler}
+                                name='image'
+                                type='images/*'
+                                error={error}
+                                margin='110px'
                             />
                         </Grid>
                         <Grid item xs={12}>

@@ -2,18 +2,26 @@ import crypto from "crypto";
 import express from "express";
 import {Error} from "mongoose";
 import User from "../modules/User";
+import {imagesUpload} from "../multer";
+import {promises as fs} from "fs";
 
 const usersRouter = express.Router();
 
-usersRouter.post('/', async (req, res, next) => {
+usersRouter.post('/',  imagesUpload.single('image'), async (req, res, next) => {
     try {
         const user = await User.create({
             username: req.body.username,
             password: req.body.password,
+            displayName: req.body.displayName,
+            avatar: req.file ? req.file.filename : null,
             token: crypto.randomUUID(),
         });
+
         return res.send({message: 'Registered successfully!', user});
     } catch (error) {
+        if (req.file) {
+            await fs.unlink(req.file.path);
+        }
         if (error instanceof Error.ValidationError) {
             return res.status(400).send(error);
         }
