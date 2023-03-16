@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
+import {selectRegisterError, selectRegisterLoading, selectUserTakenError} from "./userSlice";
 import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {register} from "./userThunks";
-import {selectRegisterError, selectRegisterLoading, selectUserTakenError} from "./userSlice";
+import FileInput from "../../components/UI/FileInput/FileInput";
 import {Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {LoadingButton} from "@mui/lab";
+import LoginWithGoogle from "../../components/GoogleLogin/LoginWithGoogle";
 import {RegisterMutation} from '../../types';
-import FileInput from "../../components/UI/FileInput/FileInput";
-import {GoogleLogin} from "@react-oauth/google";
-
 
 const Register = () => {
     const dispatch = useAppDispatch();
@@ -40,7 +39,7 @@ const Register = () => {
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
         await dispatch(register(state)).unwrap();
-        navigate('/');
+        await navigate('/');
     };
 
     const getTakenNameError = () => {
@@ -49,7 +48,7 @@ const Register = () => {
         } catch {
             return undefined;
         }
-    }
+    };
 
     const getFieldError = (fieldName: string) => {
         try {
@@ -75,16 +74,7 @@ const Register = () => {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <Box sx={{ pt: 2 }}>
-                    <GoogleLogin
-                        onSuccess={(credentialResponse) => {
-                            console.log(credentialResponse)
-                        }}
-                        onError={() => {
-                            console.log('Login failed');
-                        }}
-                    />
-                </Box>
+                <LoginWithGoogle/>
                 <Box component="form" noValidate onSubmit={submitFormHandler} sx={{mt: 3}}>
                     <Grid container spacing={2} textAlign='center'>
                         <Grid item xs={12}>

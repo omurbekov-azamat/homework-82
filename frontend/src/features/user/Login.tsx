@@ -7,6 +7,7 @@ import {useAppDispatch, useAppSelector} from "../../app/hook";
 import {selectLoginError, selectLoginLoading} from "./userSlice";
 import {login} from "./userThunks";
 import {LoadingButton} from "@mui/lab";
+import LoginWithGoogle from "../../components/GoogleLogin/LoginWithGoogle";
 import {LoginMutation} from '../../types';
 
 const Login = () => {
@@ -28,7 +29,7 @@ const Login = () => {
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
         await dispatch(login(state)).unwrap();
-        navigate('/');
+        await navigate('/');
     };
 
     return (
@@ -47,6 +48,7 @@ const Login = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
+                <LoginWithGoogle/>
                 {error && (
                     <Alert severity="error" sx={{mt: 3, width: '100%'}}>
                         {error.error}
