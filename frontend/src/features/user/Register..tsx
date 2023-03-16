@@ -8,6 +8,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {LoadingButton} from "@mui/lab";
 import {RegisterMutation} from '../../types';
 import FileInput from "../../components/UI/FileInput/FileInput";
+import {GoogleLogin} from "@react-oauth/google";
 
 
 const Register = () => {
@@ -74,6 +75,16 @@ const Register = () => {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
+                <Box sx={{ pt: 2 }}>
+                    <GoogleLogin
+                        onSuccess={(credentialResponse) => {
+                            console.log(credentialResponse)
+                        }}
+                        onError={() => {
+                            console.log('Login failed');
+                        }}
+                    />
+                </Box>
                 <Box component="form" noValidate onSubmit={submitFormHandler} sx={{mt: 3}}>
                     <Grid container spacing={2} textAlign='center'>
                         <Grid item xs={12}>
