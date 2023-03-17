@@ -20,7 +20,7 @@ const TrackHistories = () => {
             navigate('/login');
         }
         dispatch(getHistories());
-    }, [dispatch, user]);
+    }, [dispatch, user, navigate]);
 
     return (
         <>

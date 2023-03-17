@@ -52,7 +52,7 @@ albumsRouter.get('/', async (req, res, next) => {
             }
 
             if (user.role === 'user') {
-                const album = await Album.find({isPublished: true, artist: req.query.artist});
+                const album = await Album.find({isPublished: true, artist: req.query.artist}).populate('artist');
                 if (!album) {
                     return res.status(404).send({error: 'Album is not found'});
                 }
@@ -60,7 +60,7 @@ albumsRouter.get('/', async (req, res, next) => {
             }
 
             if (user.role === 'admin') {
-                const album = await Album.find({artist: req.query.artist});
+                const album = await Album.find({artist: req.query.artist}).populate('artist');
                 if (!album) {
                     return res.status(404).send({error: 'Album is not found'});
                 }

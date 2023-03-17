@@ -5,7 +5,6 @@ import {useAppDispatch, useAppSelector} from "../../../app/hook";
 import {selectLogoutLoading} from "../../../features/user/userSlice";
 import {logout} from "../../../features/user/userThunks";
 import {fetchArtists} from "../../../features/artists/artistsThunk";
-import {apiURL} from "../../../constants";
 import {User} from '../../../types';
 
 interface Props {
@@ -20,7 +19,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
     let avatar = '';
 
     if (user.avatar) {
-        avatar = apiURL + '/' + user.avatar;
+        avatar = user.avatar;
     }
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);

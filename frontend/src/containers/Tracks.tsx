@@ -10,7 +10,7 @@ import BasicModal from "../components/UI/Modal/Modal";
 
 const Tracks = () => {
     const dispatch = useAppDispatch();
-    const tracks = useAppSelector(selectTracks)
+    const tracks = useAppSelector(selectTracks);
     const artist = useAppSelector(selectArtist);
     const album = useAppSelector(selectAlbum);
     const loading = useAppSelector(selectTracksFetching);
@@ -24,7 +24,7 @@ const Tracks = () => {
         <>
             {loading && <Spinner/>}
             <Typography variant="h2" component="h2" sx={{mb: 5, fontSize: 50}}>
-                {artist && artist.name}
+                {artist && artist + '.'}
             </Typography>
             <Typography variant="h2" component="h2" sx={{mb: 3, fontSize: 30, color: 'red'}}>
                 {album && album + ' (album)'}

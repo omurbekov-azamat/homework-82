@@ -27,10 +27,11 @@ export const fetchTracksFromAlbumById = createAsyncThunk<ArtistWithTrack, string
             const album = tracksResponse.data[0].album.name;
 
             const artistResponse = await axiosApi.get('/artists?artist=' + artistID);
+            const artist = artistResponse.data.name;
 
             return {
                 tracks: tracksResponse.data,
-                artist: artistResponse.data,
+                artist,
                 album,
             };
         } catch (e) {

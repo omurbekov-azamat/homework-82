@@ -40,21 +40,14 @@ artistsRouter.get('/', async (req, res) => {
                 if (!artist) {
                     return res.status(404).send({error: 'Artist is not found'});
                 }
-                return res.send(artist);
+                const getArtist = artist[0];
+                return res.send(getArtist);
             }
 
             const user = await User.findOne({token});
 
             if (!user) {
                 return res.status(401).send({error: 'Wrong token!'});
-            }
-
-            if (user.role === 'user') {
-                const artist = await Artist.find({isPublished: true, _id: req.query.artist});
-                if (!artist) {
-                    return res.status(404).send({error: 'Artist is not found'});
-                }
-                return res.send(artist);
             }
 
             if (user.role === 'admin') {
@@ -64,6 +57,12 @@ artistsRouter.get('/', async (req, res) => {
                 }
                 return res.send(artist);
             }
+            const artist = await Artist.find({isPublished: true, _id: req.query.artist});
+            if (!artist) {
+                return res.status(404).send({error: 'Artist is not found'});
+            }
+            const getArtist = artist[0];
+            return res.send(getArtist);
         } catch (e) {
             return res.status(404).send({error: 'Not found'});
         }
@@ -136,9 +135,9 @@ artistsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, r
     try {
         await artist.save();
         return res.send({message: 'isPublished successfully changed!', artist});
-   } catch (e) {
-       return next(e);
-   }
+    } catch (e) {
+        return next(e);
+    }
 });
 
 export default artistsRouter;
